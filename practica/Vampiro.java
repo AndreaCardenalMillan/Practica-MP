@@ -1,4 +1,4 @@
-package practica;
+package PracticaMP.practica;
 
 import java.util.ArrayList;
 import java.util.Random;

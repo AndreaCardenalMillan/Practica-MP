@@ -1,4 +1,4 @@
-package practica;
+package PracticaMP.practica;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +21,11 @@ public class Personaje{
     public Personaje(String nombre, HabilidadEspecial special, ArrayList reservaArmas, ArrayList reservaArmadura, ArrayList armasActivas, Equipo armaduraActiva, ArrayList esbirro, ArrayList modList) {
 
         this.nombre = nombre;
-        this.special = new HabilidadEspecial();
+        this.special = special;
         this.reservaArmas = new ArrayList<>();
         this.reservaArmaduras = new ArrayList<>();
         this.armasActivas = new ArrayList<>();
-        this.armaduraActiva = new Equipo();
+        this.armaduraActiva = armaduraActiva;
         this.esbirro = new ArrayList<>();
         this.oro = 0;
         this.salud = 5;
