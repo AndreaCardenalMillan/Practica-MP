@@ -6,12 +6,12 @@ import java.util.Random;
 
 public class Personaje{
     private String nombre;
-    private HabilidadEspecial special;
+    private List<HabilidadEspecial> special = new ArrayList<>();
     private List<Equipo> reservaArmas=new ArrayList<>();
     private List<Equipo> reservaArmaduras=new ArrayList<>();
     private List<Equipo> armasActivas=new ArrayList<>();
     private Equipo armaduraActiva;
-    private List<Equipo> minion=new ArrayList<>();
+    private List<Minion> minion=new ArrayList<>();
     private int oro;
     public int salud;
     public int poder;
