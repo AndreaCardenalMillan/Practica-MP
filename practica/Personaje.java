@@ -11,22 +11,22 @@ public class Personaje{
     private List<Equipo> reservaArmaduras=new ArrayList<>();
     private List<Equipo> armasActivas=new ArrayList<>();
     private Equipo armaduraActiva;
-    private List<Equipo> esbirro=new ArrayList<>();
+    private List<Equipo> minion=new ArrayList<>();
     private int oro;
     public int salud;
     public int poder;
     private List<Modificador> modList =new ArrayList<>();
 
 
-    public Personaje(String nombre, HabilidadEspecial special, ArrayList reservaArmas, ArrayList reservaArmadura, ArrayList armasActivas, Equipo armaduraActiva, ArrayList esbirro, ArrayList modList) {
+    public Personaje(String nombre, ArrayList reservaArmas, ArrayList reservaArmadura, ArrayList armasActivas, Equipo armaduraActiva, ArrayList modList) {
 
         this.nombre = nombre;
-        this.special = special;
+        this.special = new ArrayList<>();
         this.reservaArmas = new ArrayList<>();
         this.reservaArmaduras = new ArrayList<>();
         this.armasActivas = new ArrayList<>();
         this.armaduraActiva = armaduraActiva;
-        this.esbirro = new ArrayList<>();
+        this.minion = new ArrayList<>();
         this.oro = 0;
         this.salud = 5;
         this.modList = new ArrayList<>();
@@ -44,8 +44,8 @@ public class Personaje{
         System.out.println(salud);
     }
 
-    public void Habilidad(){
-        //this.special.cosaDeCarlos;
+    public void Habilidad(HabilidadEspecial s){
+        this.special.add(s);
     }
 
     public boolean Esquivar(){
@@ -58,5 +58,9 @@ public class Personaje{
             exito = true;
         }
         return exito;
+    }
+
+    public void addMinion(Minion m){
+        this.minion.add(m);
     }
 }
