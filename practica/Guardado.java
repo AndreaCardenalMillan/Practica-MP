@@ -33,19 +33,26 @@ public class Guardado {
      * Habilidad de los vampiros
      */
     private Map<String,Disciplina> disciplinasCreadas=new HashMap<>();
+
+    private Map<String,String> lecturaFichero(File fichero) throws IOException{
+        Map<String,String> datosMap=new HashMap<>();
+        Reader csv=new FileReader(fichero);
+        BufferedReader buf =new BufferedReader(csv);
+        String data=buf.readLine();
+        while(data!=null){
+            String[] datos=data.split(";");
+            datosMap.put(datos[0], datos[1]);
+        }
+        buf.close();
+        return datosMap;
+    }
+
     //#region equipo
     private Equipo cargarEquipoDisco(String Id) throws IOException{
-        File equipoF=new File("ficherosConfiguracion/equipo/"+Id+".csv");//ID es id_nombre
+        File equipoF=new File("ficherosConfiguracion/equipo/"+Id+".csv");//ID es id_nombre asi puedo saber que hay disponible
         Equipo e=null;
         if(equipoF.exists()){
-            Map<String,String> equipoMap=new HashMap<>();
-            Reader csv=new FileReader(equipoF);
-            BufferedReader buf =new BufferedReader(csv);
-            String data=buf.readLine();
-            while(data!=null){
-                String[] datos=data.split(";");
-                equipoMap.put(datos[0], datos[1]);
-            }
+            Map<String,String> equipoMap=lecturaFichero(equipoF);
             Equipo.tipoEquipo tipo=Equipo.tipoEquipo.unaMano;
             if(equipoMap.get("Tipo")=="UnaMano")
             {
@@ -87,14 +94,8 @@ public class Guardado {
         File donF=new File("ficherosConfiguracion/habilidades/dones/"+Id+".csv");
         Don d=null;
         if(donF.exists()){
-            Map<String,String> mapaDatos=new HashMap<>();
-            Reader csv=new FileReader(donF);
-            BufferedReader buf =new BufferedReader(csv);
-            String data=buf.readLine();
-            while(data!=null){
-                String[] datos=data.split(";");
-                mapaDatos.put(datos[0], datos[1]);
-            }
+            Map<String,String> mapaDatos=lecturaFichero(donF);
+            
             if(mapaDatos.get("Tipo")=="Don")
             {
                 d=new Don(mapaDatos.get("Nombre"), Integer.parseInt(mapaDatos.get("Ataque")), Integer.parseInt(mapaDatos.get("Defensa")), Integer.parseInt(mapaDatos.get("RabiaMin")));
@@ -127,14 +128,8 @@ public class Guardado {
         File archivo=new File("ficherosConfiguracion/habilidades/talentos/"+Id+".csv");
         Talento t=null;
         if(archivo.exists()){
-            Map<String,String> mapaDatos=new HashMap<>();
-            Reader csv=new FileReader(archivo);
-            BufferedReader buf =new BufferedReader(csv);
-            String data=buf.readLine();
-            while(data!=null){
-                String[] datos=data.split(";");
-                mapaDatos.put(datos[0], datos[1]);
-            }
+            Map<String,String> mapaDatos=lecturaFichero(archivo);
+            
             if(mapaDatos.get("Tipo")=="Talento")
             {
                 t=new Talento(mapaDatos.get("Nombre"), Integer.parseInt(mapaDatos.get("Ataque")), Integer.parseInt(mapaDatos.get("Defensa")), Integer.parseInt(mapaDatos.get("Edad")));
@@ -167,14 +162,7 @@ public class Guardado {
         File archivo=new File("ficherosConfiguracion/habilidades/disciplinas/"+Id+".csv");
         Disciplina d=null;
         if(archivo.exists()){
-            Map<String,String> mapaDatos=new HashMap<>();
-            Reader csv=new FileReader(archivo);
-            BufferedReader buf =new BufferedReader(csv);
-            String data=buf.readLine();
-            while(data!=null){
-                String[] datos=data.split(";");
-                mapaDatos.put(datos[0], datos[1]);
-            }
+            Map<String,String> mapaDatos=lecturaFichero(archivo);
             if(mapaDatos.get("Tipo")=="Disciplina")
             {
                 d=new Disciplina(mapaDatos.get("Nombre"), Integer.parseInt(mapaDatos.get("Ataque")), Integer.parseInt(mapaDatos.get("Defensa")), Integer.parseInt(mapaDatos.get("Sangre")));
