@@ -16,7 +16,7 @@ public class Personaje{
     public int salud;
     public int poder;
     private List<Modificador> modList =new ArrayList<>();
-
+    
 
     public Personaje(String nombre, ArrayList reservaArmas, ArrayList reservaArmadura, ArrayList armasActivas, Equipo armaduraActiva, ArrayList modList) {
 
