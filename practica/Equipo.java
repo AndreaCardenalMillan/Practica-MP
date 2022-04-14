@@ -19,7 +19,9 @@ public class Equipo {
         armadura
     };
     private tipoEquipo claseEquipo;
-    
+    public int getID(){
+        return Id;
+    }
     public String getNombre() {
         return nombre;
     }

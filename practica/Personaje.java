@@ -63,4 +63,31 @@ public class Personaje{
     public void addMinion(Minion m){
         this.minion.add(m);
     }
+    public String getNombre(){
+        return nombre;
+    }
+    public List<HabilidadEspecial> getHabilidades(){
+        return special;
+    }
+    public List<Equipo> getReservaArmas(){
+        return reservaArmas;
+    }
+    public List<Equipo> getReservaArmaduras(){
+        return reservaArmaduras;
+    }
+    public List<Equipo> getArmasActivas(){
+        return armasActivas;
+    }
+    public Equipo getArmadura(){
+        return armaduraActiva;
+    }
+    public List<Minion> getMinions(){
+        return minion;
+    }
+    public int getOro(){
+        return oro;
+    }
+    public List<Modificador> getMods(){
+        return modList;
+    }
 }

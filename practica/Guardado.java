@@ -7,12 +7,16 @@ package PracticaMP.practica;
 
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Writer;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -187,6 +191,130 @@ public class Guardado {
             disciplinasCreadas.put(nombre, cargarDisciplinaDisco(nombre));
         }
         return disciplinasCreadas.get(nombre);
+    }
+    //#endregion
+
+
+    //#region personaje
+    public void guardarPersonaje(String Id, Personaje per) throws IOException{
+        File archivo=new File("guardado/personajes/"+Id+".csv");
+        archivo.delete();
+        archivo.createNewFile();
+        Writer write=new FileWriter(archivo);
+        BufferedWriter buf=new BufferedWriter(write);
+        
+        if(per instanceof Vampiro)
+        {
+            buf.write("Tipo;Vampiro");
+            buf.newLine();
+            buf.write("Sangre;"+((Vampiro)per).getSangre());
+            buf.newLine();
+            buf.write("Edad;"+((Vampiro)per).getEdad());
+        }
+        else if(per instanceof Cazador)
+        {
+            buf.write("Tipo;Cazador");
+            buf.newLine();
+            buf.write("Voluntad;"+((Cazador)per).getVoluntad());
+        }
+        else if(per instanceof Licantropo)
+        {
+            buf.write("Tipo;Licantropo");
+            buf.newLine();
+            buf.write("Rabia;"+((Licantropo)per).consultarRabia());
+        }
+        //------------------------NOMBRE
+        buf.newLine();
+        buf.write("Nombre;"+per.getNombre());
+        //--------------------------HABILIDADES
+        List<HabilidadEspecial> habilidades=per.getHabilidades();
+        String buffer="";
+        for(int i=0;i<habilidades.size();i++){
+            if(buffer!=""){
+                buffer+="|"+habilidades.get(i).getNombre();
+            }else{
+                buffer=habilidades.get(i).getNombre();
+            }
+        }
+        buf.newLine();
+        buf.write("Habilidades;"+buffer);
+        //--------------------------RESERVA DE ARMAS
+        List<Equipo> armasR=per.getReservaArmas();
+        buffer="";
+        for(int i=0;i<armasR.size();i++){
+            String identificador=armasR.get(i).getID()+"_"+armasR.get(i).getNombre();
+            if(buffer!="")
+            {
+                buffer+="|"+identificador;
+            }
+            else
+            {
+                buffer=identificador;
+            }
+        }
+        buf.newLine();
+        buf.write("ReservaArmas;"+buffer);
+        //--------------------------RESERVA DE Armaduras
+        List<Equipo> armadurasR=per.getReservaArmaduras();
+        buffer="";
+        for(int i=0;i<armadurasR.size();i++){
+            String identificador=armadurasR.get(i).getID()+"_"+armadurasR.get(i).getNombre();
+            if(buffer!="")
+            {
+                buffer+="|"+identificador;
+            }
+            else
+            {
+                buffer=identificador;
+            }
+        }
+        buf.newLine();
+        buf.write("ReservaArmaduras;"+buffer);
+        //--------------------------ARMAS ACTIVAS
+        List<Equipo> armasActivas=per.getReservaArmaduras();
+        buffer="";
+        for(int i=0;i<armasActivas.size();i++){
+            String identificador=armasActivas.get(i).getID()+"_"+armasActivas.get(i).getNombre();
+            if(buffer!="")
+            {
+                buffer+="|"+identificador;
+            }
+            else
+            {
+                buffer=identificador;
+            }
+        }
+        buf.newLine();
+        buf.write("ArmasActivas;"+buffer);
+        //--------------------------ARMADURA ACTIVA
+        buf.newLine();
+        buffer=per.getArmadura().getID()+"_"+per.getArmadura().getNombre();
+        buf.write("AmaduraActiva;"+buffer);
+        //--------------------------MINIONS
+
+        //============================================================================================
+
+        //--------------------------ORO
+        buf.newLine();
+        buf.write("Oro;"+per.getOro());
+        //--------------------------MOD LIST
+        List<Modificador> modificadores=per.getMods();
+        buffer="";
+        for(int i=0;i<modificadores.size();i++){
+            if(buffer!="")
+            {
+                buffer+="|"+modificadores.get(i).getNombre();
+            }
+            else
+            {
+                buffer=modificadores.get(i).getNombre();;
+            }
+        }
+        buf.newLine();
+        buf.write("Modificadores;"+buffer);
+
+        buf.close();
+        
     }
     //#endregion
 }

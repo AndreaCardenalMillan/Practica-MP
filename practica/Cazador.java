@@ -18,6 +18,9 @@ public class Cazador extends Personaje{
             voluntad = voluntad - 1;
         }
     }
+    public int getVoluntad(){
+        return voluntad;
+    }
 
     public void reiniciarVoluntad(){
         this.voluntad = 3;
