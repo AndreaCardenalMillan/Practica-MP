@@ -12,24 +12,27 @@ public class Personaje{
     private List<Equipo> armasActivas=new ArrayList<>();
     private Equipo armaduraActiva;
     private List<Minion> minion=new ArrayList<>();
+    private List<Modificador> modList =new ArrayList<>();
     private int oro;
+
     public int salud;
     public int poder;
-    private List<Modificador> modList =new ArrayList<>();
 
+    public Personaje(String nombre,List<HabilidadEspecial> special, ArrayList armasActivas, Equipo armaduraActiva) {
 
-    public Personaje(String nombre, ArrayList reservaArmas, ArrayList reservaArmadura, ArrayList armasActivas, Equipo armaduraActiva, ArrayList modList) {
-
+        //por parámetro
         this.nombre = nombre;
-        this.special = new ArrayList<>();
-        this.reservaArmas = new ArrayList<>();
-        this.reservaArmaduras = new ArrayList<>();
-        this.armasActivas = new ArrayList<>();
+        this.special = special;
+        this.armasActivas = armasActivas;
         this.armaduraActiva = armaduraActiva;
+
         this.minion = new ArrayList<>();
+        this.reservaArmaduras = new ArrayList<>();
+        this.reservaArmas = new ArrayList<>();
+        this.modList = new ArrayList<>();
         this.oro = 0;
         this.salud = 5;
-        this.modList = new ArrayList<>();
+        
     }
 
     public void Ataque(int ataque, Personaje p){
@@ -60,7 +63,32 @@ public class Personaje{
         return exito;
     }
 
+    public void cambiarArmaduraActiva(Equipo armadura){
+        this.armaduraActiva = armadura;
+    }
+
+    public void cambiarArmaActiva(List<Equipo> arma){
+        this.armasActivas = arma;
+    }
+
     public void addMinion(Minion m){
         this.minion.add(m);
     }
+    
+    public void addReservaArmaduras(Equipo reserva){
+        this.reservaArmaduras.add(reserva);
+    }
+
+    public void addReservaArmas(Equipo reserva){
+        this.reservaArmas.add(reserva);
+    }
+
+    public void addArmasActivas(Equipo arma){
+        this.armasActivas.add(arma);
+    }
+
+    public void addModList(Modificador mod){
+        this.modList.add(mod);
+    }
+
 }
