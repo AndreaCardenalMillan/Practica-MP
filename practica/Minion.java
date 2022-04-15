@@ -12,6 +12,9 @@ public abstract class Minion {
     private String nombre;
     private int salud;  
     
+    public String subEsbirros(){
+        return nombre;
+    }
     public int calcularVidaTotal (){
         return salud;
     }

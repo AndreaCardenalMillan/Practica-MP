@@ -12,6 +12,7 @@ public class Modificador {
     private String nombre;
     private int modAtaque;
     private int modDefensa;
+    private boolean beneficioso;
     
     public String getNombre(){
         return nombre;
@@ -34,10 +35,11 @@ public class Modificador {
         this.modDefensa = modDefensa;
     }
     
-    public Modificador (String nombre, int ataque, int defensa){
+    public Modificador (String nombre, int ataque, int defensa, boolean beneficiosoIn){
         setNombre(nombre);
         setModAtaque(ataque);
         setModDefensa(defensa);
+        beneficioso=beneficiosoIn;
     }
     
 }

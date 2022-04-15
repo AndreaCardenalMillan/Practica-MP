@@ -13,13 +13,13 @@ public class Personaje{
     private Equipo armaduraActiva;
     private List<Minion> minion=new ArrayList<>();
     private List<Modificador> modList =new ArrayList<>();
+    private List<String> notificaciones;
     private int oro;
 
     public int salud;
     public int poder;
 
     public Personaje(String nombre,List<HabilidadEspecial> special, ArrayList armasActivas, Equipo armaduraActiva) {
-
         //por parámetro
         this.nombre = nombre;
         this.special = special;
@@ -31,8 +31,7 @@ public class Personaje{
         this.reservaArmas = new ArrayList<>();
         this.modList = new ArrayList<>();
         this.oro = 0;
-        this.salud = 5;
-        
+        this.salud = 5;    
     }
 
     public void Ataque(int ataque, Personaje p){
@@ -89,6 +88,37 @@ public class Personaje{
 
     public void addModList(Modificador mod){
         this.modList.add(mod);
+    }
+    
+    public String getNombre(){
+        return nombre;
+    }
+    public List<HabilidadEspecial> getHabilidades(){
+        return special;
+    }
+    public List<Equipo> getReservaArmas(){
+        return reservaArmas;
+    }
+    public List<Equipo> getReservaArmaduras(){
+        return reservaArmaduras;
+    }
+    public List<Equipo> getArmasActivas(){
+        return armasActivas;
+    }
+    public Equipo getArmadura(){
+        return armaduraActiva;
+    }
+    public List<Minion> getMinions(){
+        return minion;
+    }
+    public int getOro(){
+        return oro;
+    }
+    public List<Modificador> getMods(){
+        return modList;
+    }
+    public List<String> getNotificaciones(){
+        return notificaciones;
     }
 
 }

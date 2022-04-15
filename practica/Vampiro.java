@@ -17,7 +17,12 @@ public class Vampiro extends Personaje{
         this.edad = edad;
         this.sangre = 0;
     }
-
+    public int getSangre(){
+        return sangre;
+    }
+    public int getEdad(){
+        return edad;
+    }
     public void robarSangre(){
         Random rn = new Random(2);
         

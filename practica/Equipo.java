@@ -9,7 +9,7 @@
  */
 package PracticaMP.practica;
 public class Equipo {
-    
+    private int Id;
     private String nombre;
     private int modAtaque;
     private int modDefensa;
@@ -19,7 +19,9 @@ public class Equipo {
         armadura
     };
     private tipoEquipo claseEquipo;
-    
+    public int getID(){
+        return Id;
+    }
     public String getNombre() {
         return nombre;
     }
@@ -48,7 +50,8 @@ public class Equipo {
         this.claseEquipo = claseEquipo;
     }   
     
-    public Equipo (String nombre, int modAtaque, int modDefensa, tipoEquipo claseEquipo){
+    public Equipo (int idIn, String nombre, int modAtaque, int modDefensa, tipoEquipo claseEquipo){
+        Id=idIn;
         setNombre(nombre);
         setModAtaque(modAtaque);
         setModDefensa(modDefensa);

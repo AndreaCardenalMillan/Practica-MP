@@ -42,6 +42,24 @@ public class Demonio extends Minion{
         }
         return salud;
     }
+    @Override
+    public String subEsbirros(){
+        String result=getNombre();
+
+        if(esbirros.size()>0){
+            result+="[";
+            for(int i=0;i<esbirros.size();i++){
+                if(i==0){
+                    result+=esbirros.get(i).subEsbirros();
+                }else{
+                    result+=","+esbirros.get(i).subEsbirros();
+                }
+            }
+            result+="]";
+        }
+
+        return result;
+    }
     
     public Demonio (String nombre, int salud, String pacto, List<Minion> esbirros){
         super(nombre, salud);
