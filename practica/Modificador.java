@@ -25,14 +25,14 @@ public class Modificador {
         return modAtaque;
     }
     public void setModAtaque(int ataque){
-        this.modAtaque = modAtaque;
+        this.modAtaque = ataque;
     }
     
     public int getModDefensa(){
         return modDefensa;
     }
     public void setModDefensa(int defensa){
-        this.modDefensa = modDefensa;
+        this.modDefensa = defensa;
     }
     
     public Modificador (String nombre, int ataque, int defensa, boolean beneficiosoIn){

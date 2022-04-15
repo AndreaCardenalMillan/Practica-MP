@@ -15,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,6 +96,7 @@ public class Guardado {
     //#endregion
 
     //#region dones
+    
     private Don cargarDonDisco(String Id) throws IOException{
         File donF=new File("ficherosConfiguracion/habilidades/dones/"+Id+".csv");
         Don d=null;
@@ -119,6 +121,9 @@ public class Guardado {
         }
         return d;
     }
+    /**
+     * Habilidad de los licantropos
+     */
     public Don cargarDon(String nombre) throws IOException{
         if(!donesCreados.containsKey(nombre))
         {
@@ -153,6 +158,9 @@ public class Guardado {
         }
         return t;
     }
+    /**
+     * Habilidad de los cazadores
+     */
     public Talento cargarTalento(String nombre) throws IOException{
         if(!talentosCreados.containsKey(nombre))
         {
@@ -186,6 +194,9 @@ public class Guardado {
         }
         return d;
     }
+    /**
+     * Habilidad de los vampiros
+     */
     public Disciplina cargarDisciplina(String nombre) throws IOException{
         if(!disciplinasCreadas.containsKey(nombre))
         {
@@ -195,6 +206,7 @@ public class Guardado {
     }
     //#endregion
 
+    //#region modificadores
     private Modificador cargaModificadorDisco(String nombre) throws IOException{
         File archivo=new File("ficherosConfiguracion/modificadores/"+nombre+".csv");
         Modificador mod=null;
@@ -219,6 +231,8 @@ public class Guardado {
         return modificadoresCreados.get(nombre);
     }
 
+    //#endregion
+
     //#region personaje
     public void guardarPersonaje(String user, Personaje per) throws IOException{
         File archivo=new File("guardado/personajes/"+user+".csv");
@@ -230,22 +244,22 @@ public class Guardado {
         if(per instanceof Vampiro)
         {
             buf.write("Tipo;Vampiro");
-            buf.newLine();
-            buf.write("Sangre;"+((Vampiro)per).getSangre());
+            //buf.newLine();
+            //buf.write("Sangre;"+((Vampiro)per).getSangre());
             buf.newLine();
             buf.write("Edad;"+((Vampiro)per).getEdad());
         }
         else if(per instanceof Cazador)
         {
             buf.write("Tipo;Cazador");
-            buf.newLine();
-            buf.write("Voluntad;"+((Cazador)per).getVoluntad());
+            //buf.newLine();
+            //buf.write("Voluntad;"+((Cazador)per).getVoluntad());
         }
         else if(per instanceof Licantropo)
         {
             buf.write("Tipo;Licantropo");
-            buf.newLine();
-            buf.write("Rabia;"+((Licantropo)per).consultarRabia());
+            //buf.newLine();
+            //buf.write("Rabia;"+((Licantropo)per).consultarRabia());
         }
         //------------------------NOMBRE
         buf.newLine();
@@ -358,6 +372,71 @@ public class Guardado {
         buf.close();
         
     }
+
+
+    public Personaje cargarPersonaje(String user) throws IOException{
+        Personaje per=null;
+
+        File archivo=new File("guardado/personajes/"+user+".csv");
+        if(archivo.exists())
+        {
+            Map<String,String> datos=lecturaFichero(archivo);
+
+            //precarga de los valores genericos
+            List<HabilidadEspecial> habilidades=new ArrayList<>();
+            String[] partesHa=datos.get("Habilidades").split("|");
+            
+            List<Equipo> armasAc=new ArrayList<>();
+            if(datos.get("ArmasActivas").contains("|"))
+            {
+                String[] partesAr=datos.get("ArmasActivas").split("|");
+                for(int i =0;i<partesAr.length;i++){
+                    armasAc.add(cargarEquipo(partesAr[i]));
+                }
+            }
+            else
+            {
+                armasAc.add(cargarEquipo(datos.get("ArmasActivas")));
+            }
+
+            Equipo armadura=cargarEquipo(datos.get("AmaduraActiva"));
+
+            if(datos.get("Tipo")=="Licantropo")
+            {
+                for(int i =0;i<partesHa.length;i++){
+                    habilidades.add(cargarDon(partesHa[i]));
+                }
+                Licantropo lican=new Licantropo(datos.get("Nombre"), habilidades, armasAc, armadura);
+                per=lican;
+            }
+            else if(datos.get("Tipo")=="Cazador")
+            {
+                for(int i =0;i<partesHa.length;i++){
+                    habilidades.add(cargarTalento(partesHa[i]));
+                }
+                Cazador cazador=new Cazador(datos.get("Nombre"), habilidades, armasAc, armadura);
+                per=cazador;
+            }
+            else if(datos.get("Tipo")=="Vampiro")
+            {
+                for(int i =0;i<partesHa.length;i++){
+                    habilidades.add(cargarDisciplina(partesHa[i]));
+                }
+                Vampiro vampire=new Vampiro(datos.get("Nombre"), habilidades, armasAc, armadura, Integer.parseInt(datos.get("Edad")));
+                per=vampire;
+            }
+            
+
+        }
+        else
+        {
+            System.out.println("El archivo de guardado referente al jugador con ID: "+user+" no existe");
+            throw new FileNotFoundException();
+        }
+
+        return per;
+    }
+
 
     public void addNotificacion(String user, String notificacion) throws IOException
     {

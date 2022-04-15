@@ -1,6 +1,6 @@
 package PracticaMP.practica;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -8,12 +8,10 @@ public class Vampiro extends Personaje{
     private int sangre;
     private int edad;
 
-    public Vampiro(String nombre, HabilidadEspecial special, ArrayList reservaArmas, ArrayList reservaArmadura, ArrayList armasActivas, Equipo armaduraActiva, ArrayList esbirro, ArrayList modList, int edad, int sangre){
-        super(nombre, special, reservaArmas, reservaArmadura, armasActivas, armaduraActiva, esbirro, modList);
+    public Vampiro(String nombre, List<HabilidadEspecial> special, List<Equipo> armasActivas, Equipo armaduraActiva, int edad){
+        super(nombre, special, armasActivas, armaduraActiva);
         
-        Random rn = new Random();
 
-        this.poder = rn.nextInt(6-1)+1;
         this.edad = edad;
         this.sangre = 0;
     }

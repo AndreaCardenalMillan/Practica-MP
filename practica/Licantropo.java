@@ -1,16 +1,15 @@
 package PracticaMP.practica;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Licantropo extends Personaje{
     private int rabia;
 
-    public Licantropo(String nombre, HabilidadEspecial special, ArrayList reservaArmas, ArrayList reservaArmadura, ArrayList armasActivas, Equipo armaduraActiva, ArrayList esbirro, int poder, ArrayList modList, int rabia, int don){
+    public Licantropo(String nombre,List<HabilidadEspecial> special, List<Equipo> armasActivas, Equipo armaduraActiva){
 
-        super(nombre,special, reservaArmas, reservaArmadura, armasActivas, armaduraActiva, esbirro, modList);
+        super(nombre,special, armasActivas, armaduraActiva);
 
-        this.poder = poder;
         this.rabia = 0;
     }
 

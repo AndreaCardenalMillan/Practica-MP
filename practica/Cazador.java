@@ -1,15 +1,14 @@
 package PracticaMP.practica;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Cazador extends Personaje{
     private int voluntad;
 
-    public Cazador(String nombre, HabilidadEspecial special, ArrayList reservaArmas, ArrayList reservaArmadura, ArrayList armasActivas, Equipo armaduraActiva, ArrayList esbirro, int poder, ArrayList modList, int voluntad){
+    public Cazador(String nombre,List<HabilidadEspecial> special, List<Equipo> armasActivas, Equipo armaduraActiva){
 
-        super(nombre,special, reservaArmas, reservaArmadura, armasActivas, armaduraActiva, esbirro, modList);
+        super(nombre,special, armasActivas, armaduraActiva);
 
-        this.poder = poder;
         this.voluntad = 3;
     }
 

@@ -19,7 +19,7 @@ public class Personaje{
     public int salud;
     public int poder;
 
-    public Personaje(String nombre,List<HabilidadEspecial> special, ArrayList armasActivas, Equipo armaduraActiva) {
+    public Personaje(String nombre,List<HabilidadEspecial> special, List<Equipo> armasActivas, Equipo armaduraActiva) {
         //por parámetro
         this.nombre = nombre;
         this.special = special;
@@ -31,7 +31,10 @@ public class Personaje{
         this.reservaArmas = new ArrayList<>();
         this.modList = new ArrayList<>();
         this.oro = 0;
-        this.salud = 5;    
+        this.salud = 5; 
+        
+        Random rn = new Random();
+        this.poder = rn.nextInt(6-1)+1;
     }
 
     public void Ataque(int ataque, Personaje p){
