@@ -16,6 +16,7 @@ public class Personaje{
     public int salud;
     public int poder;
     private List<Modificador> modList =new ArrayList<>();
+    private List<String> notificaciones;
     
 
     public Personaje(String nombre, ArrayList reservaArmas, ArrayList reservaArmadura, ArrayList armasActivas, Equipo armaduraActiva, ArrayList modList) {
@@ -90,4 +91,8 @@ public class Personaje{
     public List<Modificador> getMods(){
         return modList;
     }
+    public List<String> getNotificaciones(){
+        return notificaciones;
+    }
+
 }

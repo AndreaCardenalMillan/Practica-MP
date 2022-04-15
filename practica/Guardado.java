@@ -37,6 +37,7 @@ public class Guardado {
      * Habilidad de los vampiros
      */
     private Map<String,Disciplina> disciplinasCreadas=new HashMap<>();
+    private Map<String,Modificador> modificadoresCreados=new HashMap<>();
 
     private Map<String,String> lecturaFichero(File fichero) throws IOException{
         Map<String,String> datosMap=new HashMap<>();
@@ -186,7 +187,7 @@ public class Guardado {
         return d;
     }
     public Disciplina cargarDisciplina(String nombre) throws IOException{
-        if(!equipoCreado.containsKey(nombre))
+        if(!disciplinasCreadas.containsKey(nombre))
         {
             disciplinasCreadas.put(nombre, cargarDisciplinaDisco(nombre));
         }
@@ -194,10 +195,33 @@ public class Guardado {
     }
     //#endregion
 
+    private Modificador cargaModificadorDisco(String nombre) throws IOException{
+        File archivo=new File("ficherosConfiguracion/modificadores/"+nombre+".csv");
+        Modificador mod=null;
+        if(archivo.exists())
+        {
+            Map<String,String> datos=lecturaFichero(archivo);
+            mod=new Modificador(datos.get("Nombre"), Integer.parseInt(datos.get("ModAtaque")), Integer.parseInt(datos.get("ModDefensa")), Boolean.parseBoolean(datos.get("Beneficioso")));
+        }
+        else
+        {
+            System.out.println("El fichero de configuracion correspondiente al MODIFICADOR con nombre: "+nombre+" no existe");
+            throw new FileNotFoundException();
+        }
+        return mod;
+    }
+
+    public Modificador cargaModificador(String nombre) throws IOException{
+        if(!modificadoresCreados.containsKey(nombre)){
+            modificadoresCreados.put(nombre, cargaModificadorDisco(nombre));
+        }
+
+        return modificadoresCreados.get(nombre);
+    }
 
     //#region personaje
-    public void guardarPersonaje(String Id, Personaje per) throws IOException{
-        File archivo=new File("guardado/personajes/"+Id+".csv");
+    public void guardarPersonaje(String user, Personaje per) throws IOException{
+        File archivo=new File("guardado/personajes/"+user+".csv");
         archivo.delete();
         archivo.createNewFile();
         Writer write=new FileWriter(archivo);
@@ -292,7 +316,20 @@ public class Guardado {
         buf.write("AmaduraActiva;"+buffer);
         //--------------------------MINIONS
 
-        //============================================================================================
+        List<Minion> minions=per.getMinions();
+        buffer="";
+        for(int i=0;i<minions.size();i++){
+            if(buffer!="")
+            {
+                buffer+="|"+minions.get(i).subEsbirros();
+            }
+            else
+            {
+                buffer=minions.get(i).subEsbirros();
+            }
+        }
+        buf.newLine();
+        buf.write("Minions;"+buffer);
 
         //--------------------------ORO
         buf.newLine();
@@ -313,8 +350,22 @@ public class Guardado {
         buf.newLine();
         buf.write("Modificadores;"+buffer);
 
+        //---------------------------NOTIFICACIONES
+        //siempre tienen que ser las ultimas
+        buf.newLine();
+        buf.write("Notificaciones;");
+
         buf.close();
         
+    }
+
+    public void addNotificacion(String user, String notificacion) throws IOException
+    {
+        File archivo=new File("guardado/personajes/"+user+".csv");
+        Writer write=new FileWriter(archivo);
+        BufferedWriter buf=new BufferedWriter(write);
+        buf.write(notificacion+"|");
+        buf.close();
     }
     //#endregion
 }
