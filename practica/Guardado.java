@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.plaf.synth.Region;
+
 /**
  *
  * @author Ruben
@@ -213,6 +215,7 @@ public class Guardado {
         if(archivo.exists())
         {
             Map<String,String> datos=lecturaFichero(archivo);
+            //beneficioso de marca a TRUE si el campo vale "True" en el resto de casos es FALSE
             mod=new Modificador(datos.get("Nombre"), Integer.parseInt(datos.get("ModAtaque")), Integer.parseInt(datos.get("ModDefensa")), Boolean.parseBoolean(datos.get("Beneficioso")));
         }
         else
@@ -401,6 +404,9 @@ public class Guardado {
 
             Equipo armadura=cargarEquipo(datos.get("AmaduraActiva"));
 
+
+            //============================FALTA CARGAR LOS MINIONS===============================
+
             if(datos.get("Tipo")=="Licantropo")
             {
                 for(int i =0;i<partesHa.length;i++){
@@ -446,5 +452,79 @@ public class Guardado {
         buf.write(notificacion+"|");
         buf.close();
     }
+    //#endregion
+
+    //#region usuarios
+    public Jugador cargarJugador(String NR) throws IOException{
+        Jugador player=null;
+        File archivo=new File("guardado/usuarios/"+NR+".csv");
+        if(archivo.exists()){
+            Map<String,String> datos=lecturaFichero(archivo);
+            player=new Jugador(datos.get("Nombre"), datos.get("Nick"), datos.get("Password"));
+            //EL NR QUE HAGO CON EL?
+        }
+        else{
+            System.out.println("El fichero correspondiente al jugador con NR: "+NR+" NO existe");
+            throw new FileNotFoundException();
+        }
+        return player;
+        
+    }
+    public void guardarJugador(Jugador jugador) throws IOException{
+        File archivo=new File("guardado/usuarios/"+jugador.getNR()+".csv");
+        archivo.delete();
+        archivo.createNewFile();
+        Writer write=new FileWriter(archivo);
+        BufferedWriter buf=new BufferedWriter(write);
+        
+        //------------IDENTIFICADOR
+        buf.write("NR;"+jugador.getNR());
+        buf.newLine();
+        //------------NOMBRE--------
+        buf.write("Nombre;"+jugador.getNombre());
+        buf.newLine();
+        //------------NICK-------
+        buf.write("Nick;"+jugador.getNick());
+        buf.newLine();
+        //------------PASSWORD-----
+        buf.write("Password;"+jugador.getPassword());
+        buf.newLine();
+        buf.close();
+    }
+
+    public Administrador cargarAdmin(String nick) throws IOException{
+        Administrador admin=null;
+        File archivo=new File("guardado/usuarios/"+nick+".csv");
+        if(archivo.exists()){
+            Map<String,String> datos=lecturaFichero(archivo);
+            admin=new Administrador(datos.get("Nombre"), datos.get("Nick"), datos.get("Password"));
+            //EL NR QUE HAGO CON EL?
+        }
+        else{
+            System.out.println("El fichero correspondiente al admin con nick: "+nick+" NO existe");
+            throw new FileNotFoundException();
+        }
+        return admin;
+        
+    }
+    public void guardarAdmin(Administrador admin) throws IOException{
+        File archivo=new File("guardado/usuarios/"+admin.getNick()+".csv");
+        archivo.delete();
+        archivo.createNewFile();
+        Writer write=new FileWriter(archivo);
+        BufferedWriter buf=new BufferedWriter(write);
+        
+        //------------NOMBRE--------
+        buf.write("Nombre;"+admin.getNombre());
+        buf.newLine();
+        //------------NICK-------
+        buf.write("Nick;"+admin.getNick());
+        buf.newLine();
+        //------------PASSWORD-----
+        buf.write("Password;"+admin.getPassword());
+        buf.newLine();
+        buf.close();
+    }
+
     //#endregion
 }

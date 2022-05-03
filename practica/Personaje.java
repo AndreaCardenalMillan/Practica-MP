@@ -37,16 +37,22 @@ public class Personaje{
         this.poder = rn.nextInt(6-1)+1;
     }
 
-    public void Ataque(int ataque, Personaje p){
+    public void Ataque(int ataque, Personaje p){//Estas no hacen lo mismo?
         p.salud = p.salud - ataque;
     }
 
-    public void RecibirDanio(Personaje p){  
+    public void RecibirDanio(Personaje p){  //Estas no hacen lo mismo?
         salud = salud - p.poder;
     }
 
-    public void CalcularVidaPersonaje(){
+    public void CalcularVidaPersonaje(){//esto para que se usa?
         System.out.println(salud);
+    }
+    public int calcularDefensa(){
+        return 0;//NO LO HE HECHO
+    }
+    public int calcularAtaque(){
+        return 0; //NO lo he hecho
     }
 
     public void Habilidad(HabilidadEspecial s){
