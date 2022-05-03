@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -367,10 +368,6 @@ public class Guardado {
         buf.newLine();
         buf.write("Modificadores;"+buffer);
 
-        //---------------------------NOTIFICACIONES
-        //siempre tienen que ser las ultimas
-        buf.newLine();
-        buf.write("Notificaciones;");
 
         buf.close();
         
@@ -446,7 +443,7 @@ public class Guardado {
 
     public void addNotificacion(String user, String notificacion) throws IOException
     {
-        File archivo=new File("guardado/personajes/"+user+".csv");
+        File archivo=new File("guardado/usuarios/"+user+".csv");
         Writer write=new FileWriter(archivo);
         BufferedWriter buf=new BufferedWriter(write);
         buf.write(notificacion+"|");
@@ -462,6 +459,12 @@ public class Guardado {
             Map<String,String> datos=lecturaFichero(archivo);
             player=new Jugador(datos.get("Nombre"), datos.get("Nick"), datos.get("Password"));
             //EL NR QUE HAGO CON EL?
+            if(datos.get("Notificaciones")!=""){//hay alguna notificacion
+                String[] notificaciones=datos.get("Notificaciones").split("|");
+                List<String> notList=Arrays.asList(notificaciones);
+                notList.remove(notList.size()-1);
+                player.setNotificaciones(notList);
+            }
         }
         else{
             System.out.println("El fichero correspondiente al jugador con NR: "+NR+" NO existe");
@@ -489,6 +492,11 @@ public class Guardado {
         //------------PASSWORD-----
         buf.write("Password;"+jugador.getPassword());
         buf.newLine();
+        
+        //---------------------------NOTIFICACIONES
+        //siempre tienen que ser las ultimas
+        buf.newLine();
+        buf.write("Notificaciones;");
         buf.close();
     }
 
@@ -498,7 +506,13 @@ public class Guardado {
         if(archivo.exists()){
             Map<String,String> datos=lecturaFichero(archivo);
             admin=new Administrador(datos.get("Nombre"), datos.get("Nick"), datos.get("Password"));
-            //EL NR QUE HAGO CON EL?
+            if(datos.get("Notificaciones")!=""){//hay alguna notificacion
+                String[] notificaciones=datos.get("Notificaciones").split("|");
+                List<String> notList=Arrays.asList(notificaciones);
+                notList.remove(notList.size()-1);//el ultimo va vacio siempre
+                admin.setNotificaciones(notList);
+            }
+            
         }
         else{
             System.out.println("El fichero correspondiente al admin con nick: "+nick+" NO existe");
@@ -523,6 +537,11 @@ public class Guardado {
         //------------PASSWORD-----
         buf.write("Password;"+admin.getPassword());
         buf.newLine();
+        
+        //---------------------------NOTIFICACIONES
+        //siempre tienen que ser las ultimas
+        buf.newLine();
+        buf.write("Notificaciones;");
         buf.close();
     }
 

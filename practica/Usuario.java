@@ -3,16 +3,15 @@ package PracticaMP.practica;
 import java.util.*;
 
 public class Usuario {
-    public String nombre;
-    public String nick;
-    public String password;
-    public ArrayList<Notificacion> notificaciones;
+    private String nombre;
+    private String nick;
+    private String password;
+    private List<String> notificaciones=new ArrayList<>();
 
     public Usuario(String pNombre,String pNick,String pPassword){
         this.nombre = pNombre;
         this.nick = pNick;
         this.password =pPassword;
-        this.notificaciones =new ArrayList<>();
     }
 
     public String getNombre(){
@@ -27,10 +26,11 @@ public class Usuario {
         return this.password;
     }
 
-    public void addNotificaciones(Notificacion pNotificacion){
-        this.notificaciones.append(pNotificacion);
-    }
-    public ArrayList<Notificacion> getNotificaciones(){
+
+    public List<String> getNotificaciones(){
         return this.notificaciones;
+    }
+    public void setNotificaciones(List<String> notificacionesIn){
+        this.notificaciones=notificacionesIn;
     }
 }

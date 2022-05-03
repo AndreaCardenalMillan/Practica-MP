@@ -13,7 +13,6 @@ public class Personaje{
     private Equipo armaduraActiva;
     private List<Minion> minion=new ArrayList<>();
     private List<Modificador> modList =new ArrayList<>();
-    private List<String> notificaciones;
     private int oro;
 
     public int salud;
@@ -125,9 +124,6 @@ public class Personaje{
     }
     public List<Modificador> getMods(){
         return modList;
-    }
-    public List<String> getNotificaciones(){
-        return notificaciones;
     }
 
 }
