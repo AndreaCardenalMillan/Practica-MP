@@ -22,14 +22,23 @@ public class Modificador {
     }
     
     public int getModAtaque(){
-        return modAtaque;
+        if(beneficioso==true){
+            return modAtaque;
+        }else{
+            return -modAtaque;
+        }
     }
     public void setModAtaque(int ataque){
         this.modAtaque = ataque;
     }
     
     public int getModDefensa(){
-        return modDefensa;
+        if(beneficioso==true){
+            return modDefensa;
+        }else{
+            return -modDefensa;
+        }
+        
     }
     public void setModDefensa(int defensa){
         this.modDefensa = defensa;

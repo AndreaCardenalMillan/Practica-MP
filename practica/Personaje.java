@@ -48,10 +48,26 @@ public class Personaje{
         System.out.println(salud);
     }
     public int calcularDefensa(){
-        return 0;//NO LO HE HECHO
+        int def=armaduraActiva.getModDefensa();
+        for(int i=0;i<armasActivas.size();i++){
+            def+=armasActivas.get(i).getModDefensa();
+        }
+        for(int i=0;i<modList.size();i++){
+            def+=modList.get(i).getModDefensa();
+        }
+
+        return def;
     }
     public int calcularAtaque(){
-        return 0; //NO lo he hecho
+        int at=0;
+        at+=armaduraActiva.getModAtaque();
+        for(int i=0;i<armasActivas.size();i++){
+            at+=armasActivas.get(i).getModAtaque();
+        }
+        for(int i=0;i<modList.size();i++){
+            at+=modList.get(i).getModAtaque();
+        }
+        return at;
     }
 
     public void Habilidad(HabilidadEspecial s){
