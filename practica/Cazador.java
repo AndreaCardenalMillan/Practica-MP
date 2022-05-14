@@ -30,6 +30,34 @@ public class Cazador extends Personaje{
         System.out.println("Poder: "+this.poder);
         System.out.println("Voluntad: "+this.voluntad);
     }
+    @Override
+    public void golpeAcertado(){
+        
+    }
+    @Override
+    public void recibirGolpe(){
+        super.salud-=1;
+        perderVoluntad();
+    }
+    @Override
+    private int defensaHabilidad(){
+        int cuantDef=0;
+        List<HabilidadEspecial> habilidades=super.getHabilidades();
+        for(int i=0;i<habilidades.size();i++){
+            cuantDef+=habilidades.get(i).getDefensa();
+        }
+        return cuantDef;
+
+    }
+    @Override
+    private int ataqueHabilidad(){
+        int cuantAtaque=voluntad;
+        List<HabilidadEspecial> habilidades=super.getHabilidades();
+        for(int i=0;i<habilidades.size();i++){
+            cuantAtaque+=habilidades.get(i).getAtaque();
+        }
+        return cuantAtaque;
+    }
 
 
 }

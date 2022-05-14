@@ -4,7 +4,7 @@
  */
 
 /**
- * las habilidades de los humanos
+ * las habilidades de los cazadores
  * @author Carlos
  */
 package PracticaMP.practica;

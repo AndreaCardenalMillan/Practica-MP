@@ -39,4 +39,38 @@ public class Licantropo extends Personaje{
         System.out.println("Poder: "+this.poder);
         System.out.println("Rabia: "+this.rabia);
     }
+    @Override
+    public void golpeAcertado(){
+        
+    }
+    @Override
+    public void recibirGolpe(){
+        super.salud-=1;
+        incrementarRabia();
+    }
+    @Override
+    private int defensaHabilidad(){
+        int cuantDef=0;
+        List<HabilidadEspecial> habilidades=super.getHabilidades();
+        for(int i=0;i<habilidades.size();i++){
+            int coste=(Don)(habilidades.get(i)).getRabia();
+            if(coste<=rabia){
+                cuantDef+=habilidades.get(i).getAtaque();
+            }
+        }
+        return cuantDef;
+
+    }
+    @Override
+    private int ataqueHabilidad(){
+        int cuantAtaque=rabia;
+        List<HabilidadEspecial> habilidades=super.getHabilidades();
+        for(int i=0;i<habilidades.size();i++){
+            int coste=(Don)(habilidades.get(i)).getRabia();
+            if(coste<=rabia){
+                cuantAtaque+=habilidades.get(i).getAtaque();
+            }
+        }
+        return cuantAtaque;
+    }
 }

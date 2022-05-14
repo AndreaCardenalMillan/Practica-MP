@@ -50,25 +50,29 @@ public class Combate {
                 }
             }
             if(turno==1){
-                comentario="El personaje 1 ha obtenido "+acAtaque1+ " puntos de ataque y el personaje 2 ha obtenido "+acDef2+" puntos de defensa";
+                comentario="El "+per1.getNombre()+" ha obtenido "+acAtaque1+ " puntos de ataque y el "+per2.getNombre()+" ha obtenido "+acDef2+" puntos de defensa";
                 log.add(comentario);
                 System.out.println(comentario);
                 if(acAtaque1>acDef2){
-                    comentario="El personaje 1 ha acertado el golpe";
+                    comentario="El "+per1.getNombre()+" ha acertado el golpe";
+                    per1.golpeAcertado();
+                    per2.recibirGolpe();
                     log.add(comentario);
                 }else{
-                    comentario="El personaje 1 ha fallado el golpe, el personaje 2 se ha defendido con exito";
+                    comentario="El "+per1.getNombre()+" ha fallado el golpe, el "+per2.getNombre()+" se ha defendido con exito";
                     log.add(comentario); 
                 }
             }else{
-                comentario="El personaje 2 ha obtenido "+acAtaque2+ " puntos de ataque y el personaje 1 ha obtenido "+acDef1+" puntos de defensa";
+                comentario="El "+per2.getNombre()+" ha obtenido "+acAtaque2+ " puntos de ataque y el "+per1.getNombre()+" ha obtenido "+acDef1+" puntos de defensa";
                 log.add(comentario);
                 System.out.println(comentario);
                 if(acAtaque2>acDef1){
-                    comentario="El personaje 2 ha acertado el golpe";
+                    comentario="El "+per2.getNombre()+" ha acertado el golpe";
+                    per2.golpeAcertado();
+                    per1.recibirGolpe();
                     log.add(comentario);
                 }else{
-                    comentario="El personaje 2 ha fallado el golpe, el personaje 1 se ha defendido con exito";
+                    comentario="El "+per2.getNombre()+" ha fallado el golpe, el "+per1.getNombre()+" se ha defendido con exito";
                     log.add(comentario);
                 }
             }

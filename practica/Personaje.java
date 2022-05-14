@@ -36,19 +36,26 @@ public class Personaje{
         this.poder = rn.nextInt(6-1)+1;
     }
 
-    public void Ataque(int ataque, Personaje p){//Estas no hacen lo mismo?
-        p.salud = p.salud - ataque;
+    public void golpeAcertado(){//en las clases hijas se define su comportamiento
+        
     }
 
-    public void RecibirDanio(Personaje p){  //Estas no hacen lo mismo?
-        salud = salud - p.poder;
+    public void recibirGolpe(){//en las clases hijas se define su comportamiento
+        
     }
 
     public void CalcularVidaPersonaje(){//esto para que se usa?
         System.out.println(salud);
     }
+    private int defensaHabilidad(){//en las clases hijas se define su comportamiento
+        return 0;
+    }
+    private int ataqueHabilidad(){//en las clases hijas se define su comportamiento
+        return 0;
+    }
     public int calcularDefensa(){
         int def=armaduraActiva.getModDefensa();
+        def+=defensaHabilidad();
         for(int i=0;i<armasActivas.size();i++){
             def+=armasActivas.get(i).getModDefensa();
         }
@@ -60,6 +67,7 @@ public class Personaje{
     }
     public int calcularAtaque(){
         int at=0;
+        at+=ataqueHabilidad();
         at+=armaduraActiva.getModAtaque();
         for(int i=0;i<armasActivas.size();i++){
             at+=armasActivas.get(i).getModAtaque();

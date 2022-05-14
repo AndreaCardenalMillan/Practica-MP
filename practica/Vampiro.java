@@ -21,12 +21,19 @@ public class Vampiro extends Personaje{
     public int getEdad(){
         return edad;
     }
-    public void robarSangre(){
-        Random rn = new Random(2);
+    public void robarSangre(){//esto de donde ha salido?
         
         if (this.sangre < 10){
-            this.sangre = this.sangre + rn.nextInt();
+            sangre=Math.min(sangre+4, 10);
         }
+    }
+    @Override
+    public void golpeAcertado(){
+        robarSangre();
+    }
+    @Override
+    public void recibirGolpe(){
+        super.salud-=1;
     }
 
     public void puntosSangre(){
@@ -47,5 +54,37 @@ public class Vampiro extends Personaje{
         System.out.println("Poder: "+this.poder);
         System.out.println("Sangre: "+this.sangre);
         System.out.println("Edad: "+this.edad);
+    }
+
+    @Override
+    private int defensaHabilidad(){
+        int cuantDef=0;
+        List<HabilidadEspecial> habilidades=super.getHabilidades();
+        for(int i=0;i<habilidades.size();i++){
+            int coste=(Disciplina)(habilidades.get(i)).getRabia();
+            if(coste<=sangre){
+                cuantDef+=habilidades.get(i).getAtaque();
+                sangre-=coste;
+            }
+        }
+        return cuantDef;
+
+    }
+    @Override
+    private int ataqueHabilidad(){
+
+        int cuantAtaque=0;
+        if(sangre>=5){
+            cuantAtaque+=2;
+        }
+        List<HabilidadEspecial> habilidades=super.getHabilidades();
+        for(int i=0;i<habilidades.size();i++){
+            int coste=(Disciplina)(habilidades.get(i)).getRabia();
+            if(coste<=sangre){
+                cuantAtaque+=habilidades.get(i).getAtaque();
+                sangre-=coste;
+            }
+        }
+        return cuantAtaque;
     }
 }
