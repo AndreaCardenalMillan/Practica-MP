@@ -15,14 +15,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.swing.plaf.synth.Region;
 
 import PracticaMP.practica.Humano.lealtad;
 
@@ -59,9 +56,53 @@ public class Guardado {
         return datosMap;
     }
 
+    private final String rutaEquipo="ficherosConfiguracion/equipo/";
+    private final String rutaDones="ficherosConfiguracion/habilidades/dones/";
+    private final String rutaTalentos="ficherosConfiguracion/habilidades/talentos/";
+    private final String rutaDisciplinas="ficherosConfiguracion/habilidades/disciplinas/";
+    private final String rutaModificadores="ficherosConfiguracion/modificadores/";
+
+    private final String rutaPersonajes="guardado/personajes/";
+    private final String rutaUsuarios="guardado/usuarios/";
+
+    //#region obtener elementos
+    public List<String> listaArchivos(String ruta){
+        File archivo=new File(ruta);
+        File[] archivos= archivo.listFiles();
+        List<String> resultados=new ArrayList<>();
+        for(int i=0;i<archivos.length;i++){
+            resultados.add(archivos[i].getName());
+        }
+        return resultados;
+    }
+
+    public List<String> listaEquipo(){
+        return listaArchivos(rutaEquipo);
+    }
+    public List<String> listaDones(){
+        return listaArchivos(rutaDones);
+    }
+    public List<String> listaTalentos(){
+        return listaArchivos(rutaTalentos);
+    }
+    public List<String> listaDisciplinas(){
+        return listaArchivos(rutaDisciplinas);
+    }
+    public List<String> listaModificadores(){
+        return listaArchivos(rutaModificadores);
+    }
+    public List<String> listaPersonajes(){
+        return listaArchivos(rutaPersonajes);
+    }
+    public List<String> listaUsuarios(){
+        return listaArchivos(rutaUsuarios);
+    }
+    //#endregion
+
+
     //#region equipo
     private Equipo cargarEquipoDisco(String Id) throws IOException{
-        File equipoF=new File("ficherosConfiguracion/equipo/"+Id+".csv");//ID es id_nombre asi puedo saber que hay disponible
+        File equipoF=new File(rutaEquipo+Id+".csv");//ID es id_nombre asi puedo saber que hay disponible
         Equipo e=null;
         if(equipoF.exists()){
             Map<String,String> equipoMap=lecturaFichero(equipoF);
@@ -104,7 +145,7 @@ public class Guardado {
     //#region dones
     
     private Don cargarDonDisco(String Id) throws IOException{
-        File donF=new File("ficherosConfiguracion/habilidades/dones/"+Id+".csv");
+        File donF=new File(rutaDones+Id+".csv");
         Don d=null;
         if(donF.exists()){
             Map<String,String> mapaDatos=lecturaFichero(donF);
@@ -141,7 +182,7 @@ public class Guardado {
 
     //#region talentos
     private Talento cargarTalentoDisco(String Id) throws IOException{
-        File archivo=new File("ficherosConfiguracion/habilidades/talentos/"+Id+".csv");
+        File archivo=new File(rutaTalentos+Id+".csv");
         Talento t=null;
         if(archivo.exists()){
             Map<String,String> mapaDatos=lecturaFichero(archivo);
@@ -178,7 +219,7 @@ public class Guardado {
     
     //#region disciplinas
     private Disciplina cargarDisciplinaDisco(String Id) throws IOException{
-        File archivo=new File("ficherosConfiguracion/habilidades/disciplinas/"+Id+".csv");
+        File archivo=new File(rutaDisciplinas+Id+".csv");
         Disciplina d=null;
         if(archivo.exists()){
             Map<String,String> mapaDatos=lecturaFichero(archivo);
@@ -214,7 +255,7 @@ public class Guardado {
 
     //#region modificadores
     private Modificador cargaModificadorDisco(String nombre) throws IOException{
-        File archivo=new File("ficherosConfiguracion/modificadores/"+nombre+".csv");
+        File archivo=new File(rutaModificadores+nombre+".csv");
         Modificador mod=null;
         if(archivo.exists())
         {
@@ -242,7 +283,7 @@ public class Guardado {
 
     //#region personaje
     public void guardarPersonaje(String user, Personaje per) throws IOException{
-        File archivo=new File("guardado/personajes/"+user+".csv");
+        File archivo=new File(rutaPersonajes+user+".csv");
         archivo.delete();
         archivo.createNewFile();
         Writer write=new FileWriter(archivo);
@@ -470,7 +511,7 @@ public class Guardado {
     public Personaje cargarPersonaje(String user) throws IOException{
         Personaje per=null;
 
-        File archivo=new File("guardado/personajes/"+user+".csv");
+        File archivo=new File(rutaPersonajes+user+".csv");
         if(archivo.exists())
         {
             Map<String,String> datos=lecturaFichero(archivo);
@@ -547,7 +588,7 @@ public class Guardado {
 
     public void addNotificacion(String user, String notificacion) throws IOException
     {
-        File archivo=new File("guardado/usuarios/"+user+".csv");
+        File archivo=new File(rutaUsuarios+user+".csv");
         Writer write=new FileWriter(archivo);
         BufferedWriter buf=new BufferedWriter(write);
         buf.write(notificacion+"|");
@@ -558,7 +599,7 @@ public class Guardado {
     //#region usuarios
     public Jugador cargarJugador(String NR) throws IOException{
         Jugador player=null;
-        File archivo=new File("guardado/usuarios/"+NR+".csv");
+        File archivo=new File(rutaUsuarios+NR+".csv");
         if(archivo.exists()){
             Map<String,String> datos=lecturaFichero(archivo);
             player=new Jugador(datos.get("Nombre"), datos.get("Nick"), datos.get("Password"));
@@ -578,7 +619,7 @@ public class Guardado {
         
     }
     public void guardarJugador(Jugador jugador) throws IOException{
-        File archivo=new File("guardado/usuarios/"+jugador.getNR()+".csv");
+        File archivo=new File(rutaUsuarios+jugador.getNR()+".csv");
         archivo.delete();
         archivo.createNewFile();
         Writer write=new FileWriter(archivo);
@@ -606,7 +647,7 @@ public class Guardado {
 
     public Administrador cargarAdmin(String nick) throws IOException{
         Administrador admin=null;
-        File archivo=new File("guardado/usuarios/"+nick+".csv");
+        File archivo=new File(rutaUsuarios+nick+".csv");
         if(archivo.exists()){
             Map<String,String> datos=lecturaFichero(archivo);
             admin=new Administrador(datos.get("Nombre"), datos.get("Nick"), datos.get("Password"));
@@ -626,7 +667,7 @@ public class Guardado {
         
     }
     public void guardarAdmin(Administrador admin) throws IOException{
-        File archivo=new File("guardado/usuarios/"+admin.getNick()+".csv");
+        File archivo=new File(rutaUsuarios+admin.getNick()+".csv");
         archivo.delete();
         archivo.createNewFile();
         Writer write=new FileWriter(archivo);
