@@ -47,10 +47,10 @@ public class Personaje{
     public void CalcularVidaPersonaje(){//esto para que se usa?
         System.out.println(salud);
     }
-    private int defensaHabilidad(){//en las clases hijas se define su comportamiento
+    public int defensaHabilidad(){//en las clases hijas se define su comportamiento
         return 0;
     }
-    private int ataqueHabilidad(){//en las clases hijas se define su comportamiento
+    public int ataqueHabilidad(){//en las clases hijas se define su comportamiento
         return 0;
     }
     public int calcularDefensa(){

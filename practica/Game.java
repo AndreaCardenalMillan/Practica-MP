@@ -1,11 +1,5 @@
-/**
- *
- * @author Neo
- * Clase principal del programa
- */
 
-package mp;
-
+package PracticaMP.practica;
 public class Game{
     public static void main(String[] args) {
         

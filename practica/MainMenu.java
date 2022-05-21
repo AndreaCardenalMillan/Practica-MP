@@ -1,12 +1,13 @@
-package mp;
+package PracticaMP.practica;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MainMenu{
 
     public void start(){
 
-        System sistema = new System();
+        Sistema sistema = new Sistema();
         Operator operador = new Operator();
 
         Scanner sn = new Scanner(System.in);

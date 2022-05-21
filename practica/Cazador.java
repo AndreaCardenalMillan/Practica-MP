@@ -40,7 +40,7 @@ public class Cazador extends Personaje{
         perderVoluntad();
     }
     @Override
-    private int defensaHabilidad(){
+    public int defensaHabilidad(){
         int cuantDef=0;
         List<HabilidadEspecial> habilidades=super.getHabilidades();
         for(int i=0;i<habilidades.size();i++){
@@ -50,7 +50,7 @@ public class Cazador extends Personaje{
 
     }
     @Override
-    private int ataqueHabilidad(){
+    public int ataqueHabilidad(){
         int cuantAtaque=voluntad;
         List<HabilidadEspecial> habilidades=super.getHabilidades();
         for(int i=0;i<habilidades.size();i++){

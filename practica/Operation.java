@@ -1,10 +1,6 @@
-package mp;
+package PracticaMP.practica;
 
 public abstract class Operation {
-    
-    public Operation(){
-
-    }
 
     abstract public void doOperation();
 

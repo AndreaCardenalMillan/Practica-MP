@@ -1,34 +1,33 @@
 package PracticaMP.practica;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
-public class Operator extends Operation {
+public class Sistema extends Operation {
+    
+    private List<Usuario> listaUsuarios = new ArrayList<>();
 
-    private ArrayList<Administrador> listaAdmins = new ArrayList<>();
 
-    public Operator(){
-
-    }
     public void doOperation(){
         mostrarMenu();
     }
 
     public void register(){
         Scanner sn = new Scanner(System.in);
-       
-        System.out.println("1. Nombre");
+        
+        System.out.println("Nombre");
         String nombre = sn.nextLine();
-        System.out.println("2. Nick");
+        System.out.println("Nick");
         String nick = sn.nextLine();
-        System.out.println("3. Password");
+        System.out.println("Contraseña");
         String contraseña= sn.nextLine();
  
-        Administrador admin = new Administrador(nombre,nick,contraseña);
+        Usuario usuario = new Usuario(nombre,nick,contraseña);
 
-        listaAdmins.add(admin);
+        listaUsuarios.add(usuario);
+        sn.close();
     }
 
     public void enter(){
@@ -41,10 +40,10 @@ public class Operator extends Operation {
         System.out.println("3. Password");
         String contraseña= sn.nextLine();
  
-        Administrador admin = new Administrador(nombre,nick,contraseña);
+        Jugador user = new Jugador(nombre,nick,contraseña);
 
-        if (Arrays.asList(listaAdmins).contains(admin)) {
-            OperatorMenu menu = new OperatorMenu(admin);
+        if (Arrays.asList(listaUsuarios).contains(user)) {
+            SystemMenu menu = new SystemMenu(user);
 
             menu.doOperation();
         }
@@ -88,4 +87,8 @@ public class Operator extends Operation {
         }
 
     }    
+
+    
 }
+
+

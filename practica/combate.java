@@ -2,16 +2,17 @@ package PracticaMP.practica;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Combate {
     
-    public void iniciarCombate(Personaje per1, Personaje per2){
+    public void iniciarCombate(Personaje per1, Personaje per2) throws InterruptedException{
         //añadir log inicial
         List<String> log=new ArrayList<>();
         String comentario;
         int turno=1;
-        while(per1.salud>=0 && per2.salud>=0){
+        while(per1.salud>0 && per2.salud>0){
             int ataque1=per1.calcularAtaque();
             int acAtaque1=0;
 
@@ -94,7 +95,7 @@ public class Combate {
         }
     }
     private int randomInt(int minInclusive, int maxInclusive){
-        Random rand;
+        Random rand = null;
         int randomNum = rand.nextInt((maxInclusive - minInclusive) + 1) + minInclusive;
         return randomNum;
     }

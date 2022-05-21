@@ -57,11 +57,11 @@ public class Vampiro extends Personaje{
     }
 
     @Override
-    private int defensaHabilidad(){
+    public int defensaHabilidad(){
         int cuantDef=0;
         List<HabilidadEspecial> habilidades=super.getHabilidades();
         for(int i=0;i<habilidades.size();i++){
-            int coste=(Disciplina)(habilidades.get(i)).getRabia();
+            int coste=((Disciplina)(habilidades.get(i))).getCoste();
             if(coste<=sangre){
                 cuantDef+=habilidades.get(i).getAtaque();
                 sangre-=coste;
@@ -71,7 +71,7 @@ public class Vampiro extends Personaje{
 
     }
     @Override
-    private int ataqueHabilidad(){
+    public int ataqueHabilidad(){
 
         int cuantAtaque=0;
         if(sangre>=5){
@@ -79,7 +79,7 @@ public class Vampiro extends Personaje{
         }
         List<HabilidadEspecial> habilidades=super.getHabilidades();
         for(int i=0;i<habilidades.size();i++){
-            int coste=(Disciplina)(habilidades.get(i)).getRabia();
+            int coste=((Disciplina)(habilidades.get(i))).getCoste();
             if(coste<=sangre){
                 cuantAtaque+=habilidades.get(i).getAtaque();
                 sangre-=coste;
