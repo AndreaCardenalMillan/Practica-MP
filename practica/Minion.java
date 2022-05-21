@@ -10,10 +10,11 @@
 package PracticaMP.practica;
 public abstract class Minion {
     private String nombre;
+    protected String tipo;
     private int salud;  
     
     public String subEsbirros(){
-        return nombre;
+        return tipo;
     }
     public int calcularVidaTotal (){
         return salud;
@@ -33,8 +34,8 @@ public abstract class Minion {
         this.salud = salud;
     }
     
-    public Minion (String nombre, int salud){
-        this.salud = salud; 
+    public Minion (String nombre){
+        this.salud = 3; 
         this.nombre = nombre;
     }
     

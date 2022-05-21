@@ -105,6 +105,9 @@ public class Personaje{
     public void addMinion(Minion m){
         this.minion.add(m);
     }
+    public void addMinionList(List<Minion> minions){
+        this.minion=minions;
+    }
     
     public void addReservaArmaduras(Equipo reserva){
         this.reservaArmaduras.add(reserva);

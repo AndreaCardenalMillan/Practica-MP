@@ -20,8 +20,13 @@ public class Ghoul extends Minion{
         this.dependencia = dependencia;
     }
     
-    public Ghoul (String nombre, int salud, int dependencia){
-        super(nombre, salud);
+    public Ghoul (String nombre, int dependencia){
+        super(nombre);
         setDependencia(dependencia);
+        super.tipo="_G";
+    }
+    @Override
+    public String subEsbirros(){
+        return tipo+"("+super.getNombre()+";"+dependencia+")";
     }
 }

@@ -15,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.plaf.synth.Region;
+
+import PracticaMP.practica.Humano.lealtad;
 
 /**
  *
@@ -372,8 +375,98 @@ public class Guardado {
         buf.close();
         
     }
+    private class infoMinion{
+        String[] partes;
+        int indiceLast;
+    }
+    private infoMinion atributrosMinions(String datos, int indice){
+        int lastChar= indice;
+        infoMinion partesMinion=new infoMinion();
+        String posChar=String.valueOf(datos.charAt(indice));
+        while(posChar!=")"){
+            lastChar++;
+            posChar=String.valueOf(datos.charAt(indice));
+        }
+        partesMinion.partes=datos.substring(indice,lastChar).split(";");
+        partesMinion.indiceLast=lastChar+1;//se salta el parentesis de cierre
+        return partesMinion;
+    }
+
+    private Minion crearMinion(String info,int indice){
+        Minion mi=null;
+        String identificador=info.substring(indice,indice+2);
+        if(identificador=="_D")
+        {
+            indice+=2;//pasa de la barra baja, se salta la letra y va al parentesis
+            infoMinion partesM=atributrosMinions(info, indice);
+            String nombre=partesM.partes[0];
+            String pacto=partesM.partes[1];
+            
+            List<Minion> esbirros=new ArrayList<>();
+            
+            
+            indice=partesM.indiceLast;
+            if(String.valueOf(info.charAt(indice))=="["){//tiene subesbirros
+                int corchetes=1;
+                while(corchetes!=0){
+                    String idSig=String.valueOf(info.charAt(indice+1));
+                    String id=String.valueOf(info.charAt(indice));
+                    if(idSig=="D" && id=="_")
+                    {
+                        esbirros.add(crearMinion(info, indice));
+                    }
+                    else if(idSig=="G" && id=="_")
+                    {
+                        esbirros.add(crearMinion(info, indice));
+                    }
+                    else if(idSig=="H" && id=="_")
+                    {
+                        esbirros.add(crearMinion(info, indice));
+                    }
+                    else if(idSig=="[")
+                    {
+                        corchetes++;
+                    }
+                    else if(idSig=="]")
+                    {
+                        corchetes--;
+                    }
+                    indice++;
+                }
+            }
+            Demonio demon=new Demonio(nombre, pacto, esbirros);
+            mi=demon;
+            //mi=new Demonio(nombre, salud, pacto, esbirros)
+        }
+        else if(identificador=="_G")
+        {
+            indice+=2;//pasa de la barra baja, se salta la letra y va al parentesis
+            infoMinion partesM=atributrosMinions(info, indice);
+            String nombre=partesM.partes[0];
+            int dependencia=Integer.parseInt(partesM.partes[1]);
+            
+            indice=partesM.indiceLast;
+
+            Ghoul ghoul=new Ghoul(nombre, dependencia);
+            mi=ghoul;
+        }
+        else if(identificador=="_H")
+        {
+            indice+=2;//pasa de la barra baja, se salta la letra y va al parentesis
+            infoMinion partesM=atributrosMinions(info, indice);
+            String nombre=partesM.partes[0];
+            lealtad lazoAfectivo=lealtad.values()[Integer.parseInt(partesM.partes[1])];
+            
+            indice=partesM.indiceLast;
+
+            Humano human=new Humano(nombre, lazoAfectivo);
+            mi=human;
+        }
 
 
+        return mi;
+
+    }
     public Personaje cargarPersonaje(String user) throws IOException{
         Personaje per=null;
 
@@ -402,7 +495,18 @@ public class Guardado {
             Equipo armadura=cargarEquipo(datos.get("AmaduraActiva"));
 
 
-            //============================FALTA CARGAR LOS MINIONS===============================
+            List<Minion> minionsL = new ArrayList<>();
+            if(datos.get("Minions").contains("|")){
+                String[] minions=datos.get("Minions").split("|");
+                for(int i=0;i<minions.length;i++){
+                    minionsL.add(crearMinion(minions[i], 0));
+                }
+            }
+            else if(datos.get("Minions").length()>=1){//1 minion, no tiene separador, pero no esta vacia
+                minionsL.add(crearMinion(datos.get("Minions"), 0));
+            }
+            
+
 
             if(datos.get("Tipo")=="Licantropo")
             {
@@ -428,7 +532,7 @@ public class Guardado {
                 Vampiro vampire=new Vampiro(datos.get("Nombre"), habilidades, armasAc, armadura, Integer.parseInt(datos.get("Edad")));
                 per=vampire;
             }
-            
+            per.addMinionList(minionsL);
 
         }
         else
@@ -436,7 +540,7 @@ public class Guardado {
             System.out.println("El archivo de guardado referente al jugador con ID: "+user+" no existe");
             throw new FileNotFoundException();
         }
-
+        
         return per;
     }
 
