@@ -28,6 +28,7 @@ public class Humano extends Minion{
         setLazoAfectivo(lazoAfectivo);
         super.tipo="_H";
 
+
     }
     @Override
     public String subEsbirros(){

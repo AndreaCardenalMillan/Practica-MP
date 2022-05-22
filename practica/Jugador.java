@@ -1,8 +1,8 @@
 package PracticaMP.practica;
 
 import java.util.List;
-
-;
+import java.util.Objects;
+import java.util.Random;
 
 public class Jugador extends Usuario {
     private String NR;
@@ -17,35 +17,33 @@ public class Jugador extends Usuario {
         String id="";
         
         List<String> idsUsuarios=Game.guardado.listaUsuarios();
-        while(id == "" || idsUsuarios.contains(id)){
-            id=generateNR(5);
+        while(Objects.equals(id,"") || idsUsuarios.contains(id)){
+            id=generateNR();
         }
         this.NR = id; 
     }
-    private String generateNR(int i){
-        String theAlphaNumericS;
+    private String generateNR(){
         StringBuilder builder;
         
-        theAlphaNumericS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                                    + "0123456789"; 
+        String letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-        builder = new StringBuilder(i); 
+        builder = new StringBuilder(); 
 
-        for (int m = 0; m < i; m++) { 
-
-            int myindex 
-                = (int)(theAlphaNumericS.length() 
-                        * Math.random()); 
-
-            builder.append(theAlphaNumericS 
-                        .charAt(myindex)); 
-        } 
+        //formato LNNLL
+        builder.append(letras.charAt(randomInt(0, letras.length()-1)));// L
+        builder.append(randomInt(0, 9));                // N
+        builder.append(randomInt(0, 9));                // N
+        builder.append(letras.charAt(randomInt(0, letras.length()-1)));// L
+        builder.append(letras.charAt(randomInt(0, letras.length()-1)));// L
 
         return builder.toString(); 
     } 
 
     public String getNR(){
         return this.NR;
+    }
+    public void setNR(String nrIn){
+        this.NR=nrIn;
     }
 
     public boolean getBaneo(){
@@ -58,5 +56,10 @@ public class Jugador extends Usuario {
 
     public void desbanear(){
         this.baneo=false;
+    }
+    private int randomInt(int minInclusive, int maxInclusive){
+        Random rand = new Random();
+        int randomNum = rand.nextInt((maxInclusive - minInclusive) + 1) + minInclusive;
+        return randomNum;
     }
 }

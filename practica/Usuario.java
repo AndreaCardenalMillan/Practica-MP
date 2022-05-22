@@ -34,5 +34,9 @@ public class Usuario {
         this.notificaciones=notificacionesIn;
     }
 
+    public void removeNotificacion(String notificacion){
+        this.notificaciones.remove(notificacion);
+    }
+
     
 }

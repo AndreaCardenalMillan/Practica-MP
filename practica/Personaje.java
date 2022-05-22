@@ -45,7 +45,7 @@ public class Personaje{
         
     }
 
-    public void CalcularVidaPersonaje(){//esto para que se usa?
+    public void CalcularVidaPersonaje(){
         System.out.println(salud);
     }
     public int defensaHabilidad(){//en las clases hijas se define su comportamiento
@@ -103,8 +103,9 @@ public class Personaje{
         this.armaduraActiva = armadura;
     }
 
-    public void cambiarArmaActiva(List<Equipo> arma){
-        this.armasActivas = arma;
+    public void cambiarArmaActiva(Equipo arma){
+        armasActivas.clear();
+        this.armasActivas.add(arma);
     }
 
     public void addMinion(Minion m){

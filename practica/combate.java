@@ -1,7 +1,11 @@
 package PracticaMP.practica;
 
+import java.io.IOException;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +21,7 @@ public class Combate {
         String ganandor;
     }
 
-    public void iniciarCombate(Personaje per1, Personaje per2,int oro) throws InterruptedException{
+    public void iniciarCombate(Personaje per1, Personaje per2,int oro) throws InterruptedException, IOException{
         //añadir log inicial
         resultadoCombate resultado=new resultadoCombate();
 
@@ -120,6 +124,7 @@ public class Combate {
             log.add(comentario);
             System.out.println(comentario);
             per2.addOro(oro);
+            resultado.ganandor=per2.getNombre();
         }
         else if(per2.salud<=0)
         {
@@ -130,9 +135,13 @@ public class Combate {
             log.add(comentario);
             System.out.println(comentario);
             per1.addOro(oro);
+            resultado.ganandor=per1.getNombre();
         }
         Game.guardado.guardarPersonaje(per1.getNR(),per1);
         Game.guardado.guardarPersonaje(per2.getNR(),per2);
+
+        resultado.log=log;
+        Game.guardado.guardarCombate(resultado);
 
     }
     private int cambiarTurno(int turno){
@@ -146,7 +155,7 @@ public class Combate {
         }
     }
     private int randomInt(int minInclusive, int maxInclusive){
-        Random rand = null;
+        Random rand = new Random();
         int randomNum = rand.nextInt((maxInclusive - minInclusive) + 1) + minInclusive;
         return randomNum;
     }

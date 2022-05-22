@@ -1,22 +1,27 @@
 package PracticaMP.practica;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.Objects;
 
 public class Operator extends Operation {
 
-    public Operator(){
+    public Operator(Scanner sn){
 
     }
-    public void doOperation(){
-        mostrarMenu();
+    public void doOperation(Scanner sn){
+        mostrarMenu(sn);
     }
 
-    public void register(){
-        Scanner sn = new Scanner(System.in);
-       
+    public void register(Scanner sn){
+        System.out.println("Registro");
+        sn.nextLine();
         System.out.println("1. Nombre");
         String nombre = sn.nextLine();
         System.out.println("2. Nick");
@@ -26,12 +31,27 @@ public class Operator extends Operation {
  
         Administrador admin = new Administrador(nombre,nick,contraseña);
 
-        Game.guardado.guardarAdmin(admin);
+        System.out.println("Quieres recibir notificaciones si:1; no:cualquier otra tecla");
+        int op = sn.nextInt();
+
+        if (op==1){
+            try {
+                Game.guardado.addUsuarioNotificado(nick);
+            } catch (IOException ex) {
+                Logger.getLogger(Operator.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        try {
+            Game.guardado.guardarAdmin(admin);
+        } catch (IOException ex) {
+            Logger.getLogger(Operator.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    public void enter(){
-        Scanner sn = new Scanner(System.in);
-       
+    public void enter(Scanner sn){
+        System.out.println("Login");
+        sn.nextLine();
         System.out.println("1. Nombre");
         String nombre = sn.nextLine();
         System.out.println("2. Nick");
@@ -43,26 +63,37 @@ public class Operator extends Operation {
 
         List<String> administradores = Game.guardado.listaUsuarios();
 
-        for(int i=0;administradores.size();i++){
-            Administrador a= Game.guardado.cargarAdmin(administradores.get(i));
-            if(a.getNick()== nick && a.getNombre()== nombre && a.getPassword()== contrasena){
-                admin = a;
+        for(int i=0;i<administradores.size();i++){
+
+            try {
+                Administrador a = Game.guardado.cargarAdmin(administradores.get(i));
+                if(Objects.equals(a.getNick(), nick) && Objects.equals(a.getNombre(), nombre) && Objects.equals(a.getPassword(), contrasena)){
+                    admin = a;
                 break;
             }
+            } catch (IOException ex) {
+                Logger.getLogger(Operator.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }
         if(admin==null){
             System.out.print("El admin no existe, registrese");
-            register();
+            register(sn);
         }
         else{
-            menu.doOperation();
+            OperatorMenu menu=new OperatorMenu(admin);
+            try {
+                menu.doOperation(sn);
+            } catch (IOException ex) {
+                Logger.getLogger(Operator.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
-        sn.close();
+        //sn.close();
     }
 
-    public void mostrarMenu(){
-        Scanner sn = new Scanner(System.in);
+    public void mostrarMenu(Scanner sn){
+        //Scanner sn = new Scanner(System.in);
         boolean salir = false;
         int opcion;
  
@@ -80,11 +111,11 @@ public class Operator extends Operation {
                 switch (opcion) {
                     case 1:
                         System.out.println("Has seleccionado Registrarse");
-                        register();
+                        register(sn);
                         break;
                     case 2:
                         System.out.println("Has seleccionado Entrar");
-                        enter();
+                        enter(sn);
                         break;
                     case 3:
                         salir = true;
@@ -97,6 +128,7 @@ public class Operator extends Operation {
                 sn.next();
             }
         }
+        //sn.close();
 
     }    
 }

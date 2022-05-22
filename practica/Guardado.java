@@ -21,7 +21,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import PracticaMP.practica.Combate.resultadoCombate;
 import PracticaMP.practica.Humano.lealtad;
+import java.util.Objects;
 
 /**
  *
@@ -50,7 +52,17 @@ public class Guardado {
         String data=buf.readLine();
         while(data!=null){
             String[] datos=data.split(";");
-            datosMap.put(datos[0], datos[1]);
+            //System.out.println(data);
+            if(datos.length==1)
+            {
+                datosMap.put(datos[0], "");
+            }
+            else
+            {
+                datosMap.put(datos[0], datos[1]);
+            }
+            
+            data=buf.readLine();
         }
         buf.close();
         return datosMap;
@@ -64,15 +76,20 @@ public class Guardado {
 
     private final String rutaPersonajes="guardado/personajes/";
     private final String rutaUsuarios="guardado/usuarios/";
+    private final String rutaCombates="guardado/combates/";
     private final String rutaUsuariosNotificaciones="guardado/notificaciones.txt";
 
     //#region obtener elementos
-    public List<String> listaArchivos(String ruta){
+    private List<String> listaArchivos(String ruta){
         File archivo=new File(ruta);
         File[] archivos= archivo.listFiles();
         List<String> resultados=new ArrayList<>();
         for(int i=0;i<archivos.length;i++){
-            resultados.add(archivos[i].getName());
+            String nombre=archivos[i].getName();
+            if(nombre.contains(".csv")){
+                nombre=nombre.replace(".csv", "");
+            }
+            resultados.add(nombre);
         }
         return resultados;
     }
@@ -98,29 +115,58 @@ public class Guardado {
     public List<String> listaUsuarios(){
         return listaArchivos(rutaUsuarios);
     }
-    public List<String> usuariosSuscritosNotificacion(){
+    public List<String> usuariosSuscritosNotificacion() throws IOException{
 
         List<String> usuarios=new ArrayList<>();
         File archivo=new File(rutaUsuariosNotificaciones);
-        Reader csv=new FileReader(fichero);
+        Reader csv=new FileReader(archivo);
         BufferedReader buf =new BufferedReader(csv);
         String data=buf.readLine();
         while(data!=null){
             usuarios.add(data);
+            data=buf.readLine();
         }
         buf.close();
-        return data;
+        return usuarios;
+    }
+
+    public void guardarCombate(resultadoCombate resultado) throws IOException{
+        String nombreArchivo=resultado.fechaCombate+"_"+resultado.personaje1+"_"+resultado.personaje2+".log";
+        File archivo=new File(rutaCombates+nombreArchivo);
+        archivo.createNewFile();
+
+        Writer log=new FileWriter(archivo);
+        BufferedWriter buf=new BufferedWriter(log);
+        buf.write("Fecha: "+resultado.fechaCombate);
+        buf.newLine();
+        buf.write("Personaje1: "+resultado.personaje1);
+        buf.newLine();
+        buf.write("Personaje2: "+resultado.personaje2);
+        buf.newLine();
+        buf.write("Oro en juego: "+resultado.oroDado);
+        buf.newLine();
+        buf.write("Ganador: "+resultado.ganandor);
+        buf.newLine();
+        buf.write("LOG del combate:");
+        buf.newLine();
+        for(int i=0;i<resultado.log.size();i++){
+            buf.write(resultado.log.get(i));
+            buf.newLine();
+        }
+        buf.close();
     }
     //#endregion
-    public void addUsuarioNotificado(String user){
+    public void addUsuarioNotificado(String user) throws IOException{
         File archivo=new File(rutaUsuariosNotificaciones);
         if(!archivo.exists()){
             archivo.createNewFile();
         }
-        Writer csv=new FileWriter(fichero);
-        BufferedWriter buf =new BufferedWriter(csv);
+        Writer txt=new FileWriter(archivo);
+        BufferedWriter buf =new BufferedWriter(txt);
         buf.write(user);
         buf.newLine();
+
+        buf.close();
     }
 
     //#region equipo
@@ -130,15 +176,15 @@ public class Guardado {
         if(equipoF.exists()){
             Map<String,String> equipoMap=lecturaFichero(equipoF);
             Equipo.tipoEquipo tipo=Equipo.tipoEquipo.unaMano;
-            if(equipoMap.get("Tipo")=="UnaMano")
+            if(Objects.equals(equipoMap.get("Tipo"),"UnaMano"))
             {
                 tipo=Equipo.tipoEquipo.unaMano;
             }
-            else if(equipoMap.get("Tipo")=="DosManos")
+            else if(Objects.equals(equipoMap.get("Tipo"),"DosManos"))
             {
                 tipo=Equipo.tipoEquipo.dosManos;
             }
-            else if(equipoMap.get("Tipo")=="Armadura")
+            else if(Objects.equals(equipoMap.get("Tipo"),"Armadura"))
             {
                 tipo=Equipo.tipoEquipo.armadura;
             }
@@ -173,7 +219,7 @@ public class Guardado {
         if(donF.exists()){
             Map<String,String> mapaDatos=lecturaFichero(donF);
             
-            if(mapaDatos.get("Tipo")=="Don")
+            if(Objects.equals(mapaDatos.get("Tipo"),"Don"))
             {
                 d=new Don(mapaDatos.get("Nombre"), Integer.parseInt(mapaDatos.get("Ataque")), Integer.parseInt(mapaDatos.get("Defensa")), Integer.parseInt(mapaDatos.get("RabiaMin")));
             }
@@ -210,7 +256,7 @@ public class Guardado {
         if(archivo.exists()){
             Map<String,String> mapaDatos=lecturaFichero(archivo);
             
-            if(mapaDatos.get("Tipo")=="Talento")
+            if(Objects.equals(mapaDatos.get("Tipo"),"Talento"))
             {
                 t=new Talento(mapaDatos.get("Nombre"), Integer.parseInt(mapaDatos.get("Ataque")), Integer.parseInt(mapaDatos.get("Defensa")), Integer.parseInt(mapaDatos.get("Edad")));
             }
@@ -246,32 +292,39 @@ public class Guardado {
         Disciplina d=null;
         if(archivo.exists()){
             Map<String,String> mapaDatos=lecturaFichero(archivo);
-            if(mapaDatos.get("Tipo")=="Disciplina")
+            //System.out.println("cargar disciplina disco mapa:"+mapaDatos.get("Tipo").strip());
+            //System.out.print(Objects.equals(mapaDatos.get("Tipo").strip(),"Disciplina"));
+            if(Objects.equals(mapaDatos.get("Tipo").strip(),"Disciplina"))
             {
                 d=new Disciplina(mapaDatos.get("Nombre"), Integer.parseInt(mapaDatos.get("Ataque")), Integer.parseInt(mapaDatos.get("Defensa")), Integer.parseInt(mapaDatos.get("Sangre")));
             }
             else
             {
-                System.out.println("El fichero de configuracion correspondiente a la DISCIPLINA con nombre: "+Id+" no es del tipo correcto");
+                System.out.println("El fichero de configuracion correspondiente a la DISCIPLINA con nombre: "+Id+" no es del tipo correcto: -"+mapaDatos.get("Tipo")+"-");
                 throw new FileNotFoundException();
             }
             
         }
         else
         {
-            System.out.println("El fichero de configuracion correspondiente a la DISCIPLINA con nombre: "+Id+" no existe");
+            System.out.println("El fichero de configuracion correspondiente a la DISCIPLINA con nombre: "+Id+" no existe"+archivo.getPath());
             throw new FileNotFoundException();
         }
+        //System.out.println("cargar disciplina disco return");
         return d;
     }
     /**
      * Habilidad de los vampiros
      */
     public Disciplina cargarDisciplina(String nombre) throws IOException{
+        //System.out.println("cargar disciplina: "+nombre);
         if(!disciplinasCreadas.containsKey(nombre))
         {
+            //System.out.println("cargar disciplina");
             disciplinasCreadas.put(nombre, cargarDisciplinaDisco(nombre));
+            //System.out.println("cargar disciplina2");
         }
+        //System.out.println("return");
         return disciplinasCreadas.get(nombre);
     }
     //#endregion
@@ -339,7 +392,7 @@ public class Guardado {
         List<HabilidadEspecial> habilidades=per.getHabilidades();
         String buffer="";
         for(int i=0;i<habilidades.size();i++){
-            if(buffer!=""){
+            if(!Objects.equals(buffer,"")){
                 buffer+="|"+habilidades.get(i).getNombre();
             }else{
                 buffer=habilidades.get(i).getNombre();
@@ -352,7 +405,7 @@ public class Guardado {
         buffer="";
         for(int i=0;i<armasR.size();i++){
             String identificador=armasR.get(i).getID()+"_"+armasR.get(i).getNombre();
-            if(buffer!="")
+            if(!Objects.equals(buffer,""))
             {
                 buffer+="|"+identificador;
             }
@@ -368,7 +421,7 @@ public class Guardado {
         buffer="";
         for(int i=0;i<armadurasR.size();i++){
             String identificador=armadurasR.get(i).getID()+"_"+armadurasR.get(i).getNombre();
-            if(buffer!="")
+            if(!Objects.equals(buffer,""))
             {
                 buffer+="|"+identificador;
             }
@@ -380,11 +433,11 @@ public class Guardado {
         buf.newLine();
         buf.write("ReservaArmaduras;"+buffer);
         //--------------------------ARMAS ACTIVAS
-        List<Equipo> armasActivas=per.getReservaArmaduras();
+        List<Equipo> armasActivas=per.getArmasActivas();
         buffer="";
         for(int i=0;i<armasActivas.size();i++){
             String identificador=armasActivas.get(i).getID()+"_"+armasActivas.get(i).getNombre();
-            if(buffer!="")
+            if(!Objects.equals(buffer,""))
             {
                 buffer+="|"+identificador;
             }
@@ -404,7 +457,7 @@ public class Guardado {
         List<Minion> minions=per.getMinions();
         buffer="";
         for(int i=0;i<minions.size();i++){
-            if(buffer!="")
+            if(!Objects.equals(buffer,""))
             {
                 buffer+="|"+minions.get(i).subEsbirros();
             }
@@ -423,7 +476,7 @@ public class Guardado {
         List<Modificador> modificadores=per.getMods();
         buffer="";
         for(int i=0;i<modificadores.size();i++){
-            if(buffer!="")
+            if(!Objects.equals(buffer,""))
             {
                 buffer+="|"+modificadores.get(i).getNombre();
             }
@@ -459,7 +512,7 @@ public class Guardado {
     private Minion crearMinion(String info,int indice){
         Minion mi=null;
         String identificador=info.substring(indice,indice+2);
-        if(identificador=="_D")
+        if(Objects.equals(identificador,"_D"))
         {
             indice+=2;//pasa de la barra baja, se salta la letra y va al parentesis
             infoMinion partesM=atributrosMinions(info, indice);
@@ -470,28 +523,28 @@ public class Guardado {
             
             
             indice=partesM.indiceLast;
-            if(String.valueOf(info.charAt(indice))=="["){//tiene subesbirros
+            if(Objects.equals(String.valueOf(info.charAt(indice)),"[")){//tiene subesbirros
                 int corchetes=1;
                 while(corchetes!=0){
                     String idSig=String.valueOf(info.charAt(indice+1));
                     String id=String.valueOf(info.charAt(indice));
-                    if(idSig=="D" && id=="_")
+                    if(Objects.equals(idSig,"D") && Objects.equals(id,"_"))
                     {
                         esbirros.add(crearMinion(info, indice));
                     }
-                    else if(idSig=="G" && id=="_")
+                    else if(Objects.equals(idSig,"G") && Objects.equals(id,"_"))
                     {
                         esbirros.add(crearMinion(info, indice));
                     }
-                    else if(idSig=="H" && id=="_")
+                    else if(Objects.equals(idSig,"H") && Objects.equals(id,"_"))
                     {
                         esbirros.add(crearMinion(info, indice));
                     }
-                    else if(idSig=="[")
+                    else if(Objects.equals(idSig,"["))
                     {
                         corchetes++;
                     }
-                    else if(idSig=="]")
+                    else if(Objects.equals(idSig,"]"))
                     {
                         corchetes--;
                     }
@@ -502,7 +555,7 @@ public class Guardado {
             mi=demon;
             //mi=new Demonio(nombre, salud, pacto, esbirros)
         }
-        else if(identificador=="_G")
+        else if(Objects.equals(identificador,"_G"))
         {
             indice+=2;//pasa de la barra baja, se salta la letra y va al parentesis
             infoMinion partesM=atributrosMinions(info, indice);
@@ -514,7 +567,7 @@ public class Guardado {
             Ghoul ghoul=new Ghoul(nombre, dependencia);
             mi=ghoul;
         }
-        else if(identificador=="_H")
+        else if(Objects.equals(identificador,"_H"))
         {
             indice+=2;//pasa de la barra baja, se salta la letra y va al parentesis
             infoMinion partesM=atributrosMinions(info, indice);
@@ -541,7 +594,13 @@ public class Guardado {
 
             //precarga de los valores genericos
             List<HabilidadEspecial> habilidades=new ArrayList<>();
-            String[] partesHa=datos.get("Habilidades").split("|");
+            String[] partesHa={datos.get("Habilidades")};
+            
+            if(datos.get("Habilidades").contains("|")){
+                partesHa=datos.get("Habilidades").split("|");
+            }
+            
+            //System.out.println(datos.get("Habilidades")+" habilidad============================="+partesHa[0]);
             
             List<Equipo> armasAc=new ArrayList<>();
             if(datos.get("ArmasActivas").contains("|"))
@@ -572,7 +631,7 @@ public class Guardado {
             
 
 
-            if(datos.get("Tipo")=="Licantropo")
+            if(Objects.equals(datos.get("Tipo"),"Licantropo"))
             {
                 for(int i =0;i<partesHa.length;i++){
                     habilidades.add(cargarDon(partesHa[i]));
@@ -580,7 +639,7 @@ public class Guardado {
                 Licantropo lican=new Licantropo(datos.get("Nombre"), habilidades, armasAc, armadura);
                 per=lican;
             }
-            else if(datos.get("Tipo")=="Cazador")
+            else if(Objects.equals(datos.get("Tipo"),"Cazador"))
             {
                 for(int i =0;i<partesHa.length;i++){
                     habilidades.add(cargarTalento(partesHa[i]));
@@ -588,9 +647,10 @@ public class Guardado {
                 Cazador cazador=new Cazador(datos.get("Nombre"), habilidades, armasAc, armadura);
                 per=cazador;
             }
-            else if(datos.get("Tipo")=="Vampiro")
+            else if(Objects.equals(datos.get("Tipo"),"Vampiro"))
             {
                 for(int i =0;i<partesHa.length;i++){
+                    //System.out.println(partesHa[i]);
                     habilidades.add(cargarDisciplina(partesHa[i]));
                 }
                 Vampiro vampire=new Vampiro(datos.get("Nombre"), habilidades, armasAc, armadura, Integer.parseInt(datos.get("Edad")));
@@ -598,6 +658,7 @@ public class Guardado {
             }
             per.addMinionList(minionsL);
             per.setNR(user);
+            per.setOro(Integer.parseInt(datos.get("Oro")));
 
         }
         else
@@ -627,13 +688,16 @@ public class Guardado {
         if(archivo.exists()){
             Map<String,String> datos=lecturaFichero(archivo);
             player=new Jugador(datos.get("Nombre"), datos.get("Nick"), datos.get("Password"));
-            //EL NR QUE HAGO CON EL?
-            if(datos.get("Notificaciones")!=""){//hay alguna notificacion
+            
+            /*
+            if (!Objects.equals(datos.get("Notificaciones"),"")){
+            //if(datos.get("Notificaciones")!=""){//hay alguna notificacion
                 String[] notificaciones=datos.get("Notificaciones").split("|");
                 List<String> notList=Arrays.asList(notificaciones);
                 notList.remove(notList.size()-1);
                 player.setNotificaciones(notList);
-            }
+            }*/
+            player.setNR(datos.get("NR"));
         }
         else{
             System.out.println("El fichero correspondiente al jugador con NR: "+NR+" NO existe");
@@ -664,7 +728,6 @@ public class Guardado {
         
         //---------------------------NOTIFICACIONES
         //siempre tienen que ser las ultimas
-        buf.newLine();
         buf.write("Notificaciones;");
         buf.close();
     }
@@ -675,12 +738,14 @@ public class Guardado {
         if(archivo.exists()){
             Map<String,String> datos=lecturaFichero(archivo);
             admin=new Administrador(datos.get("Nombre"), datos.get("Nick"), datos.get("Password"));
-            if(datos.get("Notificaciones")!=""){//hay alguna notificacion
+            /*
+            if(!Objects.equals(datos.get("Notificaciones"),"")){
+            //if(datos.get("Notificaciones")!=""){//hay alguna notificacion
                 String[] notificaciones=datos.get("Notificaciones").split("|");
                 List<String> notList=Arrays.asList(notificaciones);
                 notList.remove(notList.size()-1);//el ultimo va vacio siempre
                 admin.setNotificaciones(notList);
-            }
+            }*/
             
         }
         else{
@@ -709,7 +774,6 @@ public class Guardado {
         
         //---------------------------NOTIFICACIONES
         //siempre tienen que ser las ultimas
-        buf.newLine();
         buf.write("Notificaciones;");
         buf.close();
     }

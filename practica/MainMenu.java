@@ -8,9 +8,10 @@ public class MainMenu{
     public void start(){
 
         Sistema sistema = new Sistema();
-        Operator operador = new Operator();
-
         Scanner sn = new Scanner(System.in);
+        Operator operador = new Operator(sn);
+
+        
         boolean salir = false;
         int opcion;
  
@@ -28,11 +29,13 @@ public class MainMenu{
                 switch (opcion) {
                     case 1:
                         System.out.println("Modo Sistema");
-                        sistema.doOperation();
+                        sistema.doOperation(sn);
+                        salir = true;
                         break;
                     case 2:
                         System.out.println("Modo Admin");
-                        operador.doOperation();
+                        operador.doOperation(sn);
+                        salir = true;
                         break;
                     case 3:
                         salir = true;
@@ -44,7 +47,8 @@ public class MainMenu{
                 System.out.println("Debes insertar un número");
                 sn.next();
             }
-        } 
+        }
+        //sn.close(); 
     }
 
 }

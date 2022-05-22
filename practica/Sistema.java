@@ -6,17 +6,27 @@ import java.util.List;
 import java.util.Scanner;
 
 import PracticaMP.practica.Equipo.tipoEquipo;
+import java.io.IOException;
+import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Sistema extends Operation {
 
 
-    public void doOperation(){
-        mostrarMenu();
+    public void doOperation(Scanner sn){
+        //Scanner snScanner sn = new Scanner(System.in);
+        while(true){
+            mostrarMenu(sn);
+        }
+        //sn.close();
+        
     }
 
-    public void register(){
-        Scanner sn = new Scanner(System.in);
-        
+    public void register(Scanner sn){
+
+        System.out.println("Registro");
+        sn.nextLine();
         System.out.println("Nombre");
         String nombre = sn.nextLine();
         System.out.println("Nick");
@@ -27,7 +37,11 @@ public class Sistema extends Operation {
         Jugador jugador = new Jugador(nombre,nick,contraseña);
         jugador.crearNR();
 
-        Game.guardado.guardarJugador(jugador);
+        try {
+            Game.guardado.guardarJugador(jugador);
+        } catch (IOException ex) {
+            Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
 
         boolean salir = false;
@@ -49,9 +63,11 @@ public class Sistema extends Operation {
                 List<HabilidadEspecial> habilidad=new ArrayList<>();
                 Equipo armadura=null;
                 List<Equipo> arma=new ArrayList<>();
-                List<String> equipos=new ArrayList<>();
+                List<String> equipos=Game.guardado.listaEquipo();
                 for(int i=0;i<equipos.size();i++){
                     Equipo eq=Game.guardado.cargarEquipo(equipos.get(i));
+                    //System.out.println(eq.getNombre());
+                    //System.out.println(eq.getClaseEquipo());
                     if(arma.size()==0){
                         if(eq.getClaseEquipo()==tipoEquipo.unaMano){
                             arma.add(eq);
@@ -61,6 +77,7 @@ public class Sistema extends Operation {
                         }
                     }else if(armadura==null){
                         if(eq.getClaseEquipo()==tipoEquipo.armadura){
+                            //System.out.println("armadura encontrada: "+eq.getNombre());
                             armadura=eq;
                         }
                     }else{
@@ -75,17 +92,19 @@ public class Sistema extends Operation {
                         Cazador cazador = new Cazador(nombrePersonaje,habilidad,arma,armadura);
                         cazador.setNR(jugador.getNR());
 
-                        Game.guardado.guardarPersonaje(jugador,cazador);
+                        Game.guardado.guardarPersonaje(jugador.getNR(),cazador);
                         salir = true;
                         break;
                     case 2:
                         System.out.println("Has seleccionado Vampiro");
                         
                         habilidad.add(Game.guardado.cargarDisciplina(Game.guardado.listaDisciplinas().get(0)));
-                        Vampiro vampiro = new Vampiro(nombrePersonaje,habilidad,arma,armadura);
+                        //System.out.print("hola 1");
+                        Vampiro vampiro = new Vampiro(nombrePersonaje,habilidad,arma,armadura,10);
+                        //System.out.print("hola 2");
                         vampiro.setNR(jugador.getNR());
-
-                        Game.guardado.guardarPersonaje(jugador,vampiro);
+                        //System.out.print("hola 3");
+                        Game.guardado.guardarPersonaje(jugador.getNR(),vampiro);
                         salir = true;
                         break;
                     case 3:
@@ -95,7 +114,7 @@ public class Sistema extends Operation {
                         Licantropo licantropo = new Licantropo(nombrePersonaje,habilidad,arma,armadura);
                         licantropo.setNR(jugador.getNR());
 
-                        Game.guardado.guardarPersonaje(jugador,licantropo);
+                        Game.guardado.guardarPersonaje(jugador.getNR(),licantropo);
                         salir = true;
                         break;
                     default:
@@ -104,15 +123,28 @@ public class Sistema extends Operation {
             } catch (InputMismatchException e) {
                 System.out.println("Debes insertar un número");
                 sn.next();
+            } catch (IOException ex) {
+                Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
-        sn.close();
+        System.out.println("Quieres recibir notificaciones si:1; no:cualquier otra tecla");
+        int op = sn.nextInt();
+
+        if (op==1){
+            try {
+                Game.guardado.addUsuarioNotificado(jugador.getNR());
+            } catch (IOException ex) {
+                Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        //sn.close();
     }
 
-    public void enter(){
-        Scanner sn = new Scanner(System.in);
-       
+    public void enter(Scanner sn){
+        System.out.println("Login");
+        sn.nextLine();
         System.out.println("1. Nombre");
         String nombre = sn.nextLine();
         System.out.println("2. Nick");
@@ -126,29 +158,42 @@ public class Sistema extends Operation {
 
 
         for(int i=0;i<usuarios.size();i++){
-            Jugador j=Game.guardado.cargarJugador(usuarios.get(i));
-            if(j.getNick()==nick && j.getNombre()==nombre && j.getPassword()==contrasena){
-                user=j;
-                break;
+            Jugador j;
+            try {
+                j = Game.guardado.cargarJugador(usuarios.get(i));
+                if(Objects.equals(j.getNick(),nick) && Objects.equals(j.getNombre(),nombre) && Objects.equals(j.getPassword(),contrasena)){
+                    user=j;
+                    break;
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
             }
+            
         }
         if(user==null)
         {
             System.out.print("El usuario no existe, registrese");
-            register();
+            register(sn);
         }
         else
         {
-            SystemMenu menu = new SystemMenu(user);
-            menu.doOperation();
+           
+            try {
+                SystemMenu menu = new SystemMenu(user);
+                menu.doOperation(sn);
+            } catch (IOException ex) {
+                Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Sistema.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }
-        
 
-        sn.close();
+        //sn.close();
     }
 
-    public void mostrarMenu(){
-        Scanner sn = new Scanner(System.in);
+    public void mostrarMenu(Scanner sn){
+        //Scanner sn = new Scanner(System.in);
         boolean salir = false;
         int opcion;
  
@@ -166,11 +211,13 @@ public class Sistema extends Operation {
                 switch (opcion) {
                     case 1:
                         System.out.println("Has seleccionado Registrarse");
-                        register();
+                        register(sn);
+                        salir = true;
                         break;
                     case 2:
                         System.out.println("Has seleccionado Entrar");
-                        enter();
+                        enter(sn);
+                        salir= true;
                         break;
                     case 3:
                         salir = true;
@@ -183,7 +230,7 @@ public class Sistema extends Operation {
                 sn.next();
             }
         }
-        sn.close();
+        //sn.close();
 
     }    
  
