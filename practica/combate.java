@@ -1,5 +1,6 @@
 package PracticaMP.practica;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -7,10 +8,34 @@ import java.util.concurrent.TimeUnit;
 
 public class Combate {
     
-    public void iniciarCombate(Personaje per1, Personaje per2) throws InterruptedException{
+    public class resultadoCombate{
+        List<String> log=new ArrayList<>();
+        String fechaCombate;
+        String personaje1;
+        String personaje2;
+        int oroDado;
+        String ganandor;
+    }
+
+    public void iniciarCombate(Personaje per1, Personaje per2,int oro) throws InterruptedException{
         //añadir log inicial
+        resultadoCombate resultado=new resultadoCombate();
+
+        //====================INICIALIZACION DEL RESULTADO DEL COMBATE==================
+        Date date = Calendar.getInstance().getTime();  
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
+        resultado.fechaCombate = dateFormat.format(date); 
+        resultado.personaje1=per1.getNombre();
+        resultado.personaje2=per2.getNombre();
+        resultado.oroDado=oro;
+
+
         List<String> log=new ArrayList<>();
         String comentario;
+
+        comentario="El combate entre "+per1.getNombre()+" contra "+per2.getNombre()+" da comienzo con "+oro+" de oro en juego";
+        log.add(comentario);
+        System.out.println(comentario);
         int turno=1;
         while(per1.salud>0 && per2.salud>0){
             int ataque1=per1.calcularAtaque();
@@ -59,9 +84,11 @@ public class Combate {
                     per1.golpeAcertado();
                     per2.recibirGolpe();
                     log.add(comentario);
+                    System.out.println(comentario);
                 }else{
                     comentario="El "+per1.getNombre()+" ha fallado el golpe, el "+per2.getNombre()+" se ha defendido con exito";
-                    log.add(comentario); 
+                    log.add(comentario);
+                    System.out.println(comentario); 
                 }
             }else{
                 comentario="El "+per2.getNombre()+" ha obtenido "+acAtaque2+ " puntos de ataque y el "+per1.getNombre()+" ha obtenido "+acDef1+" puntos de defensa";
@@ -72,9 +99,11 @@ public class Combate {
                     per2.golpeAcertado();
                     per1.recibirGolpe();
                     log.add(comentario);
+                    System.out.println(comentario);
                 }else{
                     comentario="El "+per2.getNombre()+" ha fallado el golpe, el "+per1.getNombre()+" se ha defendido con exito";
                     log.add(comentario);
+                    System.out.println(comentario);
                 }
             }
 
@@ -82,6 +111,28 @@ public class Combate {
             turno=cambiarTurno(turno);
         }
         //añadir log final
+        if(per1.salud<=0)
+        {
+            comentario=per1.getNombre()+" ha sucumbido al poder de "+per2.getNombre();
+            log.add(comentario);
+            System.out.println(comentario);
+            comentario=per2.getNombre()+" gana el combate recibiendo "+oro+" de oro";
+            log.add(comentario);
+            System.out.println(comentario);
+            per2.addOro(oro);
+        }
+        else if(per2.salud<=0)
+        {
+            comentario=per2.getNombre()+" ha sucumbido al poder de "+per1.getNombre();
+            log.add(comentario);
+            System.out.println(comentario);
+            comentario=per1.getNombre()+" gana el combate recibiendo "+oro+" de oro";
+            log.add(comentario);
+            System.out.println(comentario);
+            per1.addOro(oro);
+        }
+        Game.guardado.guardarPersonaje(per1.getNR(),per1);
+        Game.guardado.guardarPersonaje(per2.getNR(),per2);
 
     }
     private int cambiarTurno(int turno){

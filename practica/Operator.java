@@ -7,8 +7,6 @@ import java.util.Scanner;
 
 public class Operator extends Operation {
 
-    private ArrayList<Administrador> listaAdmins = new ArrayList<>();
-
     public Operator(){
 
     }
@@ -28,7 +26,7 @@ public class Operator extends Operation {
  
         Administrador admin = new Administrador(nombre,nick,contraseña);
 
-        listaAdmins.add(admin);
+        Game.guardado.guardarAdmin(admin);
     }
 
     public void enter(){
@@ -39,15 +37,28 @@ public class Operator extends Operation {
         System.out.println("2. Nick");
         String nick = sn.nextLine();
         System.out.println("3. Password");
-        String contraseña= sn.nextLine();
+        String contrasena= sn.nextLine();
  
-        Administrador admin = new Administrador(nombre,nick,contraseña);
+        Administrador admin = null;
 
-        if (Arrays.asList(listaAdmins).contains(admin)) {
-            OperatorMenu menu = new OperatorMenu(admin);
+        List<String> administradores = Game.guardado.listaUsuarios();
 
+        for(int i=0;administradores.size();i++){
+            Administrador a= Game.guardado.cargarAdmin(administradores.get(i));
+            if(a.getNick()== nick && a.getNombre()== nombre && a.getPassword()== contrasena){
+                admin = a;
+                break;
+            }
+        }
+        if(admin==null){
+            System.out.print("El admin no existe, registrese");
+            register();
+        }
+        else{
             menu.doOperation();
         }
+
+        sn.close();
     }
 
     public void mostrarMenu(){

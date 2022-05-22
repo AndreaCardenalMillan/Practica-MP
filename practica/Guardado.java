@@ -64,6 +64,7 @@ public class Guardado {
 
     private final String rutaPersonajes="guardado/personajes/";
     private final String rutaUsuarios="guardado/usuarios/";
+    private final String rutaUsuariosNotificaciones="guardado/notificaciones.txt";
 
     //#region obtener elementos
     public List<String> listaArchivos(String ruta){
@@ -97,8 +98,30 @@ public class Guardado {
     public List<String> listaUsuarios(){
         return listaArchivos(rutaUsuarios);
     }
-    //#endregion
+    public List<String> usuariosSuscritosNotificacion(){
 
+        List<String> usuarios=new ArrayList<>();
+        File archivo=new File(rutaUsuariosNotificaciones);
+        Reader csv=new FileReader(fichero);
+        BufferedReader buf =new BufferedReader(csv);
+        String data=buf.readLine();
+        while(data!=null){
+            usuarios.add(data);
+        }
+        buf.close();
+        return data;
+    }
+    //#endregion
+    public void addUsuarioNotificado(String user){
+        File archivo=new File(rutaUsuariosNotificaciones);
+        if(!archivo.exists()){
+            archivo.createNewFile();
+        }
+        Writer csv=new FileWriter(fichero);
+        BufferedWriter buf =new BufferedWriter(csv);
+        buf.write(user);
+        buf.newLine();
+    }
 
     //#region equipo
     private Equipo cargarEquipoDisco(String Id) throws IOException{
@@ -574,6 +597,7 @@ public class Guardado {
                 per=vampire;
             }
             per.addMinionList(minionsL);
+            per.setNR(user);
 
         }
         else

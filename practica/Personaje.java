@@ -6,6 +6,7 @@ import java.util.Random;
 
 public class Personaje{
     private String nombre;
+    private String nr;
     private List<HabilidadEspecial> special = new ArrayList<>();
     private List<Equipo> reservaArmas=new ArrayList<>();
     private List<Equipo> reservaArmaduras=new ArrayList<>();
@@ -94,6 +95,10 @@ public class Personaje{
         return exito;
     }
 
+    public void cambiarNombre(String nombre){
+        this.nombre=nombre;
+    }
+
     public void cambiarArmaduraActiva(Equipo armadura){
         this.armaduraActiva = armadura;
     }
@@ -149,8 +154,20 @@ public class Personaje{
     public int getOro(){
         return oro;
     }
+    public void setOro(int oroIn){
+        oro=oroIn;
+    }
+    public void addOro(int oroAdd){
+        oro+=oroAdd;
+    }
     public List<Modificador> getMods(){
         return modList;
+    }
+    public void setNR(String nrIn){
+        nr=nrIn;
+    }
+    public String getNR(){
+        return nr;
     }
 
 }

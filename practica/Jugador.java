@@ -1,14 +1,27 @@
-package PracticaMP.practica;;
+package PracticaMP.practica;
+
+import java.util.List;
+
+;
 
 public class Jugador extends Usuario {
     private String NR;
+    private boolean baneo = false;
 
     public Jugador(String pNombre,String pNick,String pPassword){
         super(pNombre,pNick,pPassword);
 
-        this.NR = generateNR(5);
+        
     }
-
+    public void crearNR(){
+        String id="";
+        
+        List<String> idsUsuarios=Game.guardado.listaUsuarios();
+        while(id == "" || idsUsuarios.contains(id)){
+            id=generateNR(5);
+        }
+        this.NR = id; 
+    }
     private String generateNR(int i){
         String theAlphaNumericS;
         StringBuilder builder;
@@ -33,5 +46,17 @@ public class Jugador extends Usuario {
 
     public String getNR(){
         return this.NR;
+    }
+
+    public boolean getBaneo(){
+        return this.baneo;
+    }
+
+    public void banear(){
+        this.baneo=true;
+    }
+
+    public void desbanear(){
+        this.baneo=false;
     }
 }

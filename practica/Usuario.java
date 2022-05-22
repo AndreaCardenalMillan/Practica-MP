@@ -7,7 +7,7 @@ public class Usuario {
     private String nick;
     private String password;
     private List<String> notificaciones=new ArrayList<>();
-
+    
     public Usuario(String pNombre,String pNick,String pPassword){
         this.nombre = pNombre;
         this.nick = pNick;
@@ -26,11 +26,13 @@ public class Usuario {
         return this.password;
     }
 
-
+    
     public List<String> getNotificaciones(){
         return this.notificaciones;
     }
     public void setNotificaciones(List<String> notificacionesIn){
         this.notificaciones=notificacionesIn;
     }
+
+    
 }
