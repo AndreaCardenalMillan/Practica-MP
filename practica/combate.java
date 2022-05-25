@@ -27,7 +27,7 @@ public class Combate {
 
         //====================INICIALIZACION DEL RESULTADO DEL COMBATE==================
         Date date = Calendar.getInstance().getTime();  
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd_hh-mm-ss");  
         resultado.fechaCombate = dateFormat.format(date); 
         resultado.personaje1=per1.getNombre();
         resultado.personaje2=per2.getNombre();
@@ -81,6 +81,7 @@ public class Combate {
             }
             if(turno==1){
                 comentario="El "+per1.getNombre()+" ha obtenido "+acAtaque1+ " puntos de ataque y el "+per2.getNombre()+" ha obtenido "+acDef2+" puntos de defensa";
+                
                 log.add(comentario);
                 System.out.println(comentario);
                 if(acAtaque1>acDef2){
@@ -96,6 +97,7 @@ public class Combate {
                 }
             }else{
                 comentario="El "+per2.getNombre()+" ha obtenido "+acAtaque2+ " puntos de ataque y el "+per1.getNombre()+" ha obtenido "+acDef1+" puntos de defensa";
+                
                 log.add(comentario);
                 System.out.println(comentario);
                 if(acAtaque2>acDef1){
@@ -111,7 +113,7 @@ public class Combate {
                 }
             }
 
-            TimeUnit.SECONDS.sleep(5);
+            TimeUnit.SECONDS.sleep(2);
             turno=cambiarTurno(turno);
         }
         //añadir log final
@@ -137,6 +139,8 @@ public class Combate {
             per1.addOro(oro);
             resultado.ganandor=per1.getNombre();
         }
+        //System.out.println(per1);
+
         Game.guardado.guardarPersonaje(per1.getNR(),per1);
         Game.guardado.guardarPersonaje(per2.getNR(),per2);
 

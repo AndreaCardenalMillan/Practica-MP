@@ -31,8 +31,8 @@ public class Jugador extends Usuario {
 
         //formato LNNLL
         builder.append(letras.charAt(randomInt(0, letras.length()-1)));// L
-        builder.append(randomInt(0, 9));                // N
-        builder.append(randomInt(0, 9));                // N
+        builder.append(randomInt(0, 9));                //  N
+        builder.append(randomInt(0, 9));                //  N
         builder.append(letras.charAt(randomInt(0, letras.length()-1)));// L
         builder.append(letras.charAt(randomInt(0, letras.length()-1)));// L
 

@@ -44,7 +44,7 @@ public class Demonio extends Minion{
     }
     @Override
     public String subEsbirros(){
-        String result=super.tipo+"("+super.getNombre()+";"+pacto+")";
+        String result=super.tipo+"("+super.getNombre()+"-"+pacto+")";
 
         if(esbirros.size()>0){
             result+="[";

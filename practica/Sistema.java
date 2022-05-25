@@ -91,7 +91,7 @@ public class Sistema extends Operation {
                         habilidad.add(Game.guardado.cargarTalento(Game.guardado.listaTalentos().get(0)));
                         Cazador cazador = new Cazador(nombrePersonaje,habilidad,arma,armadura);
                         cazador.setNR(jugador.getNR());
-
+                        cazador.setOro(1000);
                         Game.guardado.guardarPersonaje(jugador.getNR(),cazador);
                         salir = true;
                         break;
@@ -102,6 +102,7 @@ public class Sistema extends Operation {
                         //System.out.print("hola 1");
                         Vampiro vampiro = new Vampiro(nombrePersonaje,habilidad,arma,armadura,10);
                         //System.out.print("hola 2");
+                        vampiro.setOro(1000);
                         vampiro.setNR(jugador.getNR());
                         //System.out.print("hola 3");
                         Game.guardado.guardarPersonaje(jugador.getNR(),vampiro);
@@ -113,7 +114,7 @@ public class Sistema extends Operation {
 
                         Licantropo licantropo = new Licantropo(nombrePersonaje,habilidad,arma,armadura);
                         licantropo.setNR(jugador.getNR());
-
+                        licantropo.setOro(1000);
                         Game.guardado.guardarPersonaje(jugador.getNR(),licantropo);
                         salir = true;
                         break;

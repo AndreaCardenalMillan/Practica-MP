@@ -359,6 +359,7 @@ class OperatorMenu {
 
         for(int i=0;i<notificaciones.size();i++){
             String textoNotificacion="";
+            
             String[] partesNot=notificaciones.get(i).split(":");
             if(Objects.equals(partesNot[0],"D")){//desafio
                 textoNotificacion="El jugador: "+partesNot[4]+" con NR: "+partesNot[3]+" ha desafiado al jugador "+partesNot[2]+" con NR: "+partesNot[1]+" con una cantidad de oro de:"+partesNot[5];
@@ -397,7 +398,10 @@ class OperatorMenu {
 
                         String notificacionSuscritos="N:"+partes[4]+":"+partes[3]+":"+partes[2]+":"+partes[1]+":"+partes[5];
                         for(int i =0;i<usuariosSuscritos.size();i++){
-                            Game.guardado.addNotificacion(usuariosSuscritos.get(i),notificacionSuscritos);
+                            if(!Objects.equals(usuariosSuscritos.get(i), partes[1]) && !Objects.equals(usuariosSuscritos.get(i), partes[3])){
+                                Game.guardado.addNotificacion(usuariosSuscritos.get(i),notificacionSuscritos);
+                            }
+                            
                         }
 
                         String notificacionDesafiado="DA:"+partes[4]+":"+partes[3]+":"+partes[2]+":"+partes[1]+":"+partes[5];

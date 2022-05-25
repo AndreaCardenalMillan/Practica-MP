@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -161,8 +162,13 @@ public class Guardado {
         if(!archivo.exists()){
             archivo.createNewFile();
         }
-        Writer txt=new FileWriter(archivo);
+        Writer txt=new FileWriter(archivo,true);
         BufferedWriter buf =new BufferedWriter(txt);
+        
+        /*PrintWriter out=new PrintWriter(buf);
+        out.println(user);
+        out.close();*/
+        
         buf.write(user);
         buf.newLine();
 
@@ -455,6 +461,8 @@ public class Guardado {
         //--------------------------MINIONS
 
         List<Minion> minions=per.getMinions();
+        System.out.println(minions.size());
+        System.out.println(minions.get(0));
         buffer="";
         for(int i=0;i<minions.size();i++){
             if(!Objects.equals(buffer,""))
@@ -500,17 +508,22 @@ public class Guardado {
         int lastChar= indice;
         infoMinion partesMinion=new infoMinion();
         String posChar=String.valueOf(datos.charAt(indice));
-        while(posChar!=")"){
+        //System.out.println(datos);
+        while(!Objects.equals(posChar,")")){
             lastChar++;
-            posChar=String.valueOf(datos.charAt(indice));
+            //System.out.println(lastChar+"  "+posChar);
+            posChar=String.valueOf(datos.charAt(lastChar));
         }
-        partesMinion.partes=datos.substring(indice,lastChar).split(";");
+        partesMinion.partes=datos.substring(indice+1,lastChar).split("\\-");
         partesMinion.indiceLast=lastChar+1;//se salta el parentesis de cierre
         return partesMinion;
     }
 
     private Minion crearMinion(String info,int indice){
         Minion mi=null;
+        if(info.length()<=indice){
+            return null;
+        }
         String identificador=info.substring(indice,indice+2);
         if(Objects.equals(identificador,"_D"))
         {
@@ -523,7 +536,7 @@ public class Guardado {
             
             
             indice=partesM.indiceLast;
-            if(Objects.equals(String.valueOf(info.charAt(indice)),"[")){//tiene subesbirros
+            if(info.length()>indice && Objects.equals(String.valueOf(info.charAt(indice)),"[")){//tiene subesbirros
                 int corchetes=1;
                 while(corchetes!=0){
                     String idSig=String.valueOf(info.charAt(indice+1));
@@ -572,6 +585,7 @@ public class Guardado {
             indice+=2;//pasa de la barra baja, se salta la letra y va al parentesis
             infoMinion partesM=atributrosMinions(info, indice);
             String nombre=partesM.partes[0];
+            System.out.println(partesM.partes.length);
             lealtad lazoAfectivo=lealtad.values()[Integer.parseInt(partesM.partes[1])];
             
             indice=partesM.indiceLast;
@@ -594,40 +608,35 @@ public class Guardado {
 
             //precarga de los valores genericos
             List<HabilidadEspecial> habilidades=new ArrayList<>();
-            String[] partesHa={datos.get("Habilidades")};
             
-            if(datos.get("Habilidades").contains("|")){
-                partesHa=datos.get("Habilidades").split("|");
-            }
+            
+            String[] partesHa=datos.get("Habilidades").split("\\|");
+            
             
             //System.out.println(datos.get("Habilidades")+" habilidad============================="+partesHa[0]);
             
             List<Equipo> armasAc=new ArrayList<>();
-            if(datos.get("ArmasActivas").contains("|"))
-            {
-                String[] partesAr=datos.get("ArmasActivas").split("|");
-                for(int i =0;i<partesAr.length;i++){
-                    armasAc.add(cargarEquipo(partesAr[i]));
-                }
+           
+            String[] partesAr=datos.get("ArmasActivas").split("\\|");
+            for(int i =0;i<partesAr.length;i++){
+                armasAc.add(cargarEquipo(partesAr[i]));
             }
-            else
-            {
-                armasAc.add(cargarEquipo(datos.get("ArmasActivas")));
-            }
+            
 
             Equipo armadura=cargarEquipo(datos.get("AmaduraActiva"));
 
 
             List<Minion> minionsL = new ArrayList<>();
-            if(datos.get("Minions").contains("|")){
-                String[] minions=datos.get("Minions").split("|");
+            
+            String[] minions=datos.get("Minions").split("\\|");
+            System.out.println(datos.get("Minions"));
+            if(datos.get("Minions").length()>2){
                 for(int i=0;i<minions.length;i++){
                     minionsL.add(crearMinion(minions[i], 0));
                 }
             }
-            else if(datos.get("Minions").length()>=1){//1 minion, no tiene separador, pero no esta vacia
-                minionsL.add(crearMinion(datos.get("Minions"), 0));
-            }
+            
+            
             
 
 
@@ -674,7 +683,7 @@ public class Guardado {
     public void addNotificacion(String user, String notificacion) throws IOException
     {
         File archivo=new File(rutaUsuarios+user+".csv");
-        Writer write=new FileWriter(archivo);
+        Writer write=new FileWriter(archivo,true);
         BufferedWriter buf=new BufferedWriter(write);
         buf.write(notificacion+"|");
         buf.close();
@@ -689,14 +698,14 @@ public class Guardado {
             Map<String,String> datos=lecturaFichero(archivo);
             player=new Jugador(datos.get("Nombre"), datos.get("Nick"), datos.get("Password"));
             
-            /*
+            
             if (!Objects.equals(datos.get("Notificaciones"),"")){
             //if(datos.get("Notificaciones")!=""){//hay alguna notificacion
-                String[] notificaciones=datos.get("Notificaciones").split("|");
+                String[] notificaciones=datos.get("Notificaciones").split("\\|");
                 List<String> notList=Arrays.asList(notificaciones);
-                notList.remove(notList.size()-1);
+                //notList.remove(notList.size()-1);
                 player.setNotificaciones(notList);
-            }*/
+            }
             player.setNR(datos.get("NR"));
         }
         else{
@@ -738,14 +747,17 @@ public class Guardado {
         if(archivo.exists()){
             Map<String,String> datos=lecturaFichero(archivo);
             admin=new Administrador(datos.get("Nombre"), datos.get("Nick"), datos.get("Password"));
-            /*
+            
             if(!Objects.equals(datos.get("Notificaciones"),"")){
+                
             //if(datos.get("Notificaciones")!=""){//hay alguna notificacion
-                String[] notificaciones=datos.get("Notificaciones").split("|");
+                
+                String[] notificaciones=datos.get("Notificaciones").strip().split("\\|");
+                
                 List<String> notList=Arrays.asList(notificaciones);
-                notList.remove(notList.size()-1);//el ultimo va vacio siempre
+                //notList.remove(notList.size()-1);//el ultimo va vacio siempre
                 admin.setNotificaciones(notList);
-            }*/
+            }
             
         }
         else{

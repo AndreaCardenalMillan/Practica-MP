@@ -39,6 +39,6 @@ public class Humano extends Minion{
             indiceLealtad=2;
         }
         
-        return tipo+"("+super.getNombre()+";"+indiceLealtad+")";
+        return tipo+"("+super.getNombre()+"-"+indiceLealtad+")";
     }
 }

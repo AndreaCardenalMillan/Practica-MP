@@ -27,6 +27,6 @@ public class Ghoul extends Minion{
     }
     @Override
     public String subEsbirros(){
-        return tipo+"("+super.getNombre()+";"+dependencia+")";
+        return tipo+"("+super.getNombre()+"-"+dependencia+")";
     }
 }

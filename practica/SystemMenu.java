@@ -237,9 +237,9 @@ public class SystemMenu{
                             
                             Combate combate = new Combate();
 
-                            Personaje prota = Game.guardado.cargarPersonaje(user.getNR());
+                            Personaje prota = Game.guardado.cargarPersonaje(parte[2]);
 
-                            Personaje rival = Game.guardado.cargarPersonaje(parte[3]);
+                            Personaje rival = Game.guardado.cargarPersonaje(parte[4]);
 
                             combate.iniciarCombate(prota,rival,Integer.parseInt(parte[5]));
                         }
