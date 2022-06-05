@@ -330,11 +330,13 @@ class OperatorMenu {
                 switch (op) {
                     case 1:
                         System.out.println("Has seleccionado Banear");
-                        jugador.banear();
+                        jugador.setBan(true);
+                        Game.guardado.guardarJugador(jugador);
                         break;
                     case 2:
                         System.out.println("Has seleccionado Desbanear");
-                        jugador.desbanear();
+                        jugador.setBan(false);
+                        Game.guardado.guardarJugador(jugador);
                         break;
                     case 3:
                         salir = true;
@@ -362,7 +364,7 @@ class OperatorMenu {
             
             String[] partesNot=notificaciones.get(i).split(":");
             if(Objects.equals(partesNot[0],"D")){//desafio
-                textoNotificacion="El jugador: "+partesNot[4]+" con NR: "+partesNot[3]+" ha desafiado al jugador "+partesNot[2]+" con NR: "+partesNot[1]+" con una cantidad de oro de:"+partesNot[5];
+                textoNotificacion=InterpreteNoficaciones.decodificarNotificacion(notificaciones.get(i));
             }
             System.out.println(i+"= "+textoNotificacion);
         }
@@ -386,7 +388,7 @@ class OperatorMenu {
                     
                         admin.removeNotificacion(admin.getNotificaciones().get(seleccion));
 
-                        String notificacionRechazo="Han rechazado tu desafio";
+                        String notificacionRechazo="DR:"+partes[2];
                         Game.guardado.addNotificacion(partes[3], notificacionRechazo);
 
                         System.out.println("Has cancelado el desafio");
@@ -407,7 +409,7 @@ class OperatorMenu {
                         String notificacionDesafiado="DA:"+partes[4]+":"+partes[3]+":"+partes[2]+":"+partes[1]+":"+partes[5];
                         Game.guardado.addNotificacion(partes[1], notificacionDesafiado);
 
-                        String notificacionValidado="V:Han validado tu desafio";
+                        String notificacionValidado="V:"+partes[2];
                         Game.guardado.addNotificacion(partes[3], notificacionValidado);
 
                         salir = true;

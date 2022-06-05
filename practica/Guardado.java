@@ -461,8 +461,8 @@ public class Guardado {
         //--------------------------MINIONS
 
         List<Minion> minions=per.getMinions();
-        System.out.println(minions.size());
-        System.out.println(minions.get(0));
+        //System.out.println(minions.size());
+        //System.out.println(minions.get(0));
         buffer="";
         for(int i=0;i<minions.size();i++){
             if(!Objects.equals(buffer,""))
@@ -585,7 +585,7 @@ public class Guardado {
             indice+=2;//pasa de la barra baja, se salta la letra y va al parentesis
             infoMinion partesM=atributrosMinions(info, indice);
             String nombre=partesM.partes[0];
-            System.out.println(partesM.partes.length);
+            //System.out.println(partesM.partes.length);
             lealtad lazoAfectivo=lealtad.values()[Integer.parseInt(partesM.partes[1])];
             
             indice=partesM.indiceLast;
@@ -629,7 +629,7 @@ public class Guardado {
             List<Minion> minionsL = new ArrayList<>();
             
             String[] minions=datos.get("Minions").split("\\|");
-            System.out.println(datos.get("Minions"));
+            //System.out.println(datos.get("Minions"));
             if(datos.get("Minions").length()>2){
                 for(int i=0;i<minions.length;i++){
                     minionsL.add(crearMinion(minions[i], 0));
@@ -697,7 +697,7 @@ public class Guardado {
         if(archivo.exists()){
             Map<String,String> datos=lecturaFichero(archivo);
             player=new Jugador(datos.get("Nombre"), datos.get("Nick"), datos.get("Password"));
-            
+            player.setBan(Boolean.parseBoolean(datos.get("Ban")));
             
             if (!Objects.equals(datos.get("Notificaciones"),"")){
             //if(datos.get("Notificaciones")!=""){//hay alguna notificacion
@@ -734,11 +734,24 @@ public class Guardado {
         //------------PASSWORD-----
         buf.write("Password;"+jugador.getPassword());
         buf.newLine();
+        //------------BAN--------
+        buf.write("Ban;"+jugador.getBan());
+        buf.newLine();
         
         //---------------------------NOTIFICACIONES
         //siempre tienen que ser las ultimas
         buf.write("Notificaciones;");
         buf.close();
+    }
+    public void borrarUsuario(String id){
+        File usuarioF=new File(rutaUsuarios+id+".csv");
+        File personajeF=new File(rutaPersonajes+id+".csv");
+        if(usuarioF.exists()){
+            usuarioF.delete();
+            if(personajeF.exists()){
+                personajeF.delete();
+            }
+        }
     }
 
     public Administrador cargarAdmin(String nick) throws IOException{

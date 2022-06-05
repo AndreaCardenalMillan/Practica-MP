@@ -33,6 +33,8 @@ public class Combate {
         resultado.personaje2=per2.getNombre();
         resultado.oroDado=oro;
 
+        per1.CalcularVidaPersonaje();
+        per2.CalcularVidaPersonaje();
 
         List<String> log=new ArrayList<>();
         String comentario;
@@ -127,6 +129,17 @@ public class Combate {
             System.out.println(comentario);
             per2.addOro(oro);
             resultado.ganandor=per2.getNombre();
+
+            Jugador jugador1=Game.guardado.cargarJugador(per1.getNR());
+            jugador1.clearNofiticaciones();
+
+            Jugador jugador2=Game.guardado.cargarJugador(per2.getNR());
+            jugador2.clearNofiticaciones();
+
+            jugador1.addNotificacion("RE:Has perdido el combate contra: "+jugador2.getNick());
+            jugador2.addNotificacion("RE:Has ganado el combate contra: "+jugador1.getNick());
+            Game.guardado.guardarJugador(jugador1);
+            Game.guardado.guardarJugador(jugador2);
         }
         else if(per2.salud<=0)
         {
@@ -138,9 +151,20 @@ public class Combate {
             System.out.println(comentario);
             per1.addOro(oro);
             resultado.ganandor=per1.getNombre();
+
+            Jugador jugador1=Game.guardado.cargarJugador(per1.getNR());
+            jugador1.clearNofiticaciones();
+
+            Jugador jugador2=Game.guardado.cargarJugador(per2.getNR());
+            jugador2.clearNofiticaciones();
+
+            jugador2.addNotificacion("RE:Has perdido el combate contra: "+jugador1.getNick());
+            jugador1.addNotificacion("RE:Has ganado el combate contra: "+jugador2.getNick());
+            Game.guardado.guardarJugador(jugador1);
+            Game.guardado.guardarJugador(jugador2);
         }
         //System.out.println(per1);
-
+        
         Game.guardado.guardarPersonaje(per1.getNR(),per1);
         Game.guardado.guardarPersonaje(per2.getNR(),per2);
 

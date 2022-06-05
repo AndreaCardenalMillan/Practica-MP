@@ -233,7 +233,7 @@ public class SystemMenu{
                         if(per.getOro()>=Integer.parseInt(parte[5])){
                             System.out.println("Has aceptado el desafio");
 
-                            Game.guardado.addNotificacion(user.getNR(),"H:"+parte[3]+":"+"Han aceptado tu desafio");
+                            Game.guardado.addNotificacion(user.getNR(),"H:"+parte[3]+":"+parte[2]);
                             
                             Combate combate = new Combate();
 
@@ -249,7 +249,7 @@ public class SystemMenu{
                         user.removeNotificacion(user.getNotificaciones().get(seleccion));
                         System.out.println("Has rechazado el desafio");
 
-                        Game.guardado.addNotificacion(user.getNR(),"R:"+parte[3]+":"+"Han rechazado tu desafio");
+                        Game.guardado.addNotificacion(user.getNR(),"R:"+parte[3]+":"+parte[2]);
 
                         Personaje personaje = Game.guardado.cargarPersonaje(user.getNR());
 

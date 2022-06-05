@@ -6,12 +6,18 @@ import java.util.Random;
 
 public class Jugador extends Usuario {
     private String NR;
-    private boolean baneo = false;
+    private boolean baneado;
 
     public Jugador(String pNombre,String pNick,String pPassword){
         super(pNombre,pNick,pPassword);
 
         
+    }
+    public boolean getBan(){
+        return baneado;
+    }
+    public void setBan(boolean banState){
+        baneado=banState;
     }
     public void crearNR(){
         String id="";
@@ -46,17 +52,7 @@ public class Jugador extends Usuario {
         this.NR=nrIn;
     }
 
-    public boolean getBaneo(){
-        return this.baneo;
-    }
-
-    public void banear(){
-        this.baneo=true;
-    }
-
-    public void desbanear(){
-        this.baneo=false;
-    }
+    
     private int randomInt(int minInclusive, int maxInclusive){
         Random rand = new Random();
         int randomNum = rand.nextInt((maxInclusive - minInclusive) + 1) + minInclusive;

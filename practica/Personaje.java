@@ -46,7 +46,9 @@ public class Personaje{
     }
 
     public void CalcularVidaPersonaje(){
-        System.out.println(salud);
+        for(int i=0;i<minion.size();i++){
+            salud+=minion.get(i).calcularVidaTotal();
+        }
     }
     public int defensaHabilidad(){//en las clases hijas se define su comportamiento
         return 0;
